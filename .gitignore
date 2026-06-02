@@ -1,0 +1,11 @@
+.env
+*.env
+token.json
+credentials.json
+__pycache__/
+*.pyc
+
+# Never publish private exports or raw institutional data.
+data/private/
+data/raw/
+

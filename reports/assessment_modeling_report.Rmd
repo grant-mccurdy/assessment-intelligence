@@ -1,0 +1,117 @@
+---
+title: "Assessment Intelligence Modeling Report"
+subtitle: "Synthetic assessment data generated for a static portfolio dashboard"
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+## Purpose
+
+This report documents the analysis layer behind the public assessment dashboard.
+The dashboard itself is static JavaScript, but the data build and statistical
+summaries are produced ahead of time in R.
+
+The source data used here is synthetic. It is designed to preserve dashboard
+behavior and statistical structure without publishing real students, rosters,
+grades, LMS records, or school-private exports.
+
+## Load Data
+
+```{r load-data}
+student_records <- read.csv("../data/synthetic/student_level_assessment.csv", stringsAsFactors = FALSE)
+section_summary <- read.csv("../data/synthetic/section_period_summary.csv", stringsAsFactors = FALSE)
+
+str(student_records)
+str(section_summary)
+```
+
+## Program Trend
+
+```{r program-trend}
+weighted_mean <- function(values, weights) {
+  if (!sum(weights)) return(0)
+  sum(values * weights) / sum(weights)
+}
+
+period_summary <- do.call(
+  rbind,
+  lapply(split(section_summary, section_summary$order), function(rows) {
+    data.frame(
+      periodLabel = rows$periodLabel[[1]],
+      order = rows$order[[1]],
+      score = weighted_mean(rows$score, rows$students),
+      completion = weighted_mean(rows$completion, rows$students),
+      proficiency = weighted_mean(rows$proficiency, rows$students)
+    )
+  })
+)
+
+period_summary
+```
+
+```{r trend-plot}
+if (requireNamespace("ggplot2", quietly = TRUE)) {
+  ggplot2::ggplot(period_summary, ggplot2::aes(order, score)) +
+    ggplot2::geom_line(color = "#003260", linewidth = 1) +
+    ggplot2::geom_point(color = "#c69a36", size = 2.5) +
+    ggplot2::scale_x_continuous(
+      breaks = period_summary$order,
+      labels = period_summary$periodLabel
+    ) +
+    ggplot2::labs(
+      title = "Synthetic Assessment Score Trend",
+      x = NULL,
+      y = "Weighted mean score"
+    ) +
+    ggplot2::theme_minimal() +
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 35, hjust = 1))
+} else {
+  plot(period_summary$order, period_summary$score, type = "b",
+       xlab = "Assessment period", ylab = "Weighted mean score",
+       main = "Synthetic Assessment Score Trend")
+}
+```
+
+## Growth Model
+
+```{r growth-model}
+section_summary$season <- factor(section_summary$season, levels = c("Fall", "Spring"))
+section_summary$course <- factor(section_summary$course)
+section_summary$order_centered <- section_summary$order - min(section_summary$order)
+
+growth_model <- lm(
+  score ~ order_centered + season + course + completion,
+  data = section_summary,
+  weights = pmax(section_summary$completed, 1)
+)
+
+summary(growth_model)
+```
+
+## Completion Model
+
+```{r completion-model}
+completion_model <- glm(
+  cbind(completed, notCompleted) ~ order_centered + season + course,
+  data = section_summary,
+  family = binomial()
+)
+
+summary(completion_model)
+```
+
+## Interpretation Notes
+
+- The models are portfolio artifacts, not claims about a real institution.
+- The growth model demonstrates how section/course/time effects can be modeled
+  before exporting dashboard-ready summaries.
+- The completion model separates participation behavior from performance.
+- In a private deployment, the same structure could support real internal
+  analysis while publishing only synthetic or aggregate-safe outputs.
+
