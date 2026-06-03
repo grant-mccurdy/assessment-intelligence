@@ -1,0 +1,24 @@
+Package: assessmentintelligence
+Type: Project
+Title: Synthetic Assessment Intelligence Workflows
+Version: 0.0.0.9000
+Authors@R: person("Grant", "McCurdy", role = "aut")
+Description: Public-safe synthetic assessment analytics, statistical reporting,
+    and dashboard data preparation workflows.
+Encoding: UTF-8
+Imports:
+    broom,
+    caret,
+    data.table,
+    ggplot2,
+    janitor,
+    jsonlite,
+    knitr,
+    lme4,
+    lubridate,
+    nlme,
+    readr,
+    readxl,
+    rmarkdown,
+    rpart,
+    tidyverse

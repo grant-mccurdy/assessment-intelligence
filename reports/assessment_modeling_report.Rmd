@@ -21,6 +21,26 @@ The source data used here is synthetic. It is designed to preserve dashboard
 behavior and statistical structure without publishing real students, rosters,
 grades, LMS records, or school-private exports.
 
+## Recommendation
+
+Use the synthetic dashboard as a public demonstration of assessment intelligence:
+the R build layer creates fake but realistic assessment records, models growth
+and completion patterns, and exports dashboard-ready JSON for a static web
+frontend.
+
+The report should be read as a reproducible workflow artifact, not as evidence
+about a real school.
+
+## Direct Answers
+
+- **What powers the dashboard?** A synthetic assessment dataset generated and
+  summarized before deployment.
+- **What does the model layer add?** It separates growth, completion, and course
+  effects so the dashboard can support decision conversations rather than only
+  display raw scores.
+- **What is public-safe?** The records use fake students, fake teachers, fake
+  sections, synthetic scores, and validation checks.
+
 ## Load Data
 
 ```{r load-data}
@@ -29,6 +49,29 @@ section_summary <- read.csv("../data/synthetic/section_period_summary.csv", stri
 
 str(student_records)
 str(section_summary)
+```
+
+## Data Audit
+
+```{r data-audit}
+data.frame(
+  Metric = c(
+    "Student-period records",
+    "Section-period records",
+    "Synthetic students",
+    "Sections",
+    "Courses",
+    "Assessment periods"
+  ),
+  Value = c(
+    nrow(student_records),
+    nrow(section_summary),
+    length(unique(student_records$studentId)),
+    length(unique(section_summary$sectionId)),
+    length(unique(section_summary$course)),
+    length(unique(section_summary$periodId))
+  )
+)
 ```
 
 ## Program Trend
@@ -78,7 +121,19 @@ if (requireNamespace("ggplot2", quietly = TRUE)) {
 }
 ```
 
-## Growth Model
+## Model Journey
+
+The first modeling pass is intentionally simple and inspectable. It uses:
+
+- weighted linear modeling for score growth
+- binomial modeling for completion
+- course and season terms to separate structural effects
+- synthetic group sizes as weights where appropriate
+
+Future iterations can add mixed models, splines, or tree-based examples after
+the public-safe workflow is stable.
+
+## Final Growth Model
 
 ```{r growth-model}
 section_summary$season <- factor(section_summary$season, levels = c("Fall", "Spring"))
@@ -106,6 +161,58 @@ completion_model <- glm(
 summary(completion_model)
 ```
 
+## Metric Scale
+
+```{r metric-scale}
+latest_period <- max(section_summary$order)
+latest_rows <- section_summary[section_summary$order == latest_period, ]
+data.frame(
+  Metric = c("Weighted score", "Weighted completion", "Weighted proficiency"),
+  Value = c(
+    weighted_mean(latest_rows$score, latest_rows$students),
+    weighted_mean(latest_rows$completion, latest_rows$students),
+    weighted_mean(latest_rows$proficiency, latest_rows$students)
+  )
+)
+```
+
+## Model Checks
+
+```{r model-checks}
+growth_residuals <- residuals(growth_model)
+data.frame(
+  Check = c("Mean residual", "Median residual", "Residual SD"),
+  Value = c(
+    mean(growth_residuals),
+    median(growth_residuals),
+    sd(growth_residuals)
+  )
+)
+```
+
+## Sensitivity Check
+
+```{r sensitivity-check}
+target_values <- c(65, 70, 75)
+data.frame(
+  ProficiencyTarget = target_values,
+  LatestPercentAtOrAboveTarget = sapply(target_values, function(target) {
+    mean(student_records$score[
+      student_records$order == latest_period & student_records$completed
+    ] >= target) * 100
+  })
+)
+```
+
+## Decision Scenarios
+
+- If completion is below target, interpret performance trends cautiously and
+  inspect participation first.
+- If growth is positive but skill signals remain uneven, use the report to pick
+  reteaching priorities rather than declare broad success.
+- If course-level trends diverge, review pacing, assessment alignment, and
+  intervention practices before making personnel conclusions.
+
 ## Interpretation Notes
 
 - The models are portfolio artifacts, not claims about a real institution.
@@ -115,3 +222,7 @@ summary(completion_model)
 - In a private deployment, the same structure could support real internal
   analysis while publishing only synthetic or aggregate-safe outputs.
 
+## Bottom Line
+
+The reporting artifact should give leaders an answer, show enough model context
+to trust the workflow, name the caveats, and end with a practical next action.

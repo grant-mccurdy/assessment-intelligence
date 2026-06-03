@@ -8,4 +8,18 @@ __pycache__/
 # Never publish private exports or raw institutional data.
 data/private/
 data/raw/
+data/calibration/
+reports/private/
+reports/r_toolchain_smoke_test.html
+reports/r_toolchain_smoke_test.pdf
+reports/r_toolchain_smoke_test_files/
+reports/r_toolchain_smoke_test_cache/
+reports/quarto_toolchain_smoke_test.html
+reports/quarto_toolchain_smoke_test_files/
+reports/quarto_toolchain_smoke_test_cache/
 
+# Keep renv metadata, but never commit the project-local package library.
+renv/library/
+renv/staging/
+renv/sandbox/
+renv/python/

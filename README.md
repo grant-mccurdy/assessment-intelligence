@@ -9,6 +9,8 @@ This repository is intended to demonstrate how assessment systems can be designe
 - Assessment system design
 - Synthetic assessment data generation
 - Real-to-synthetic distribution bootstrapping with public-safe outputs
+- Advanced R gradebook reconstruction using private-reference schema and
+  distribution profiling
 - Privacy and schema validation before release
 - Reproducible data processing
 - Department, school, course, class, teacher, and student-level reporting views
@@ -21,6 +23,9 @@ This repository is intended to demonstrate how assessment systems can be designe
 assessment-intelligence/
 ├── analysis/
 │   ├── generate_synthetic_assessment_data.R
+│   ├── profile_reference_schema.R
+│   ├── generate_synthetic_gradebook.R
+│   ├── validate_synthetic_gradebook.R
 │   ├── model_growth.R
 │   ├── model_completion.R
 │   ├── export_dashboard_json.R
@@ -38,6 +43,8 @@ assessment-intelligence/
 │   ├── assessment-design.md
 │   ├── synthetic-data-methodology.md
 │   ├── r-analysis-pipeline.md
+│   ├── gradebook-reconstruction-workflow.md
+│   ├── reporting-artifact-philosophy.md
 │   ├── reporting-architecture.md
 │   ├── privacy-model.md
 │   └── openai-assisted-reporting.md
@@ -60,6 +67,24 @@ private assessment export
 The public project should show how useful analytics can be preserved without
 publishing real students, rosters, school-private exports, or LMS records.
 
+Reporting artifacts follow a recommendation-first statistical report philosophy:
+answer the leadership question, audit the data, show the model journey, present
+checks and sensitivity, then close with a decision-ready bottom line.
+
+Gradebook reconstruction is public workflow, private data:
+
+```text
+private reference gradebook
+-> public R reconstruction workflow
+-> synthetic Canvas-style gradebook
+-> long-form student-score analytics dataset
+-> assignment metadata and validation report
+-> public-safe analytics and reporting artifacts
+```
+
+The private reference artifacts remain in a separate private local repository;
+this repo contains the reproducible R workflow and public-safe outputs.
+
 ## R Analysis Build Layer
 
 The dashboard frontend should remain static JavaScript for GitHub Pages. R is
@@ -68,6 +93,25 @@ render a modeling report, and export dashboard-ready JSON:
 
 ```bash
 Rscript analysis/run_pipeline.R
+```
+
+Build a synthetic gradebook from a private reference artifact:
+
+```bash
+REFERENCE_GRADEBOOK="<private reference gradebook path>"
+make gradebook-workflow
+```
+
+This R workflow profiles the private gradebook shape, synthesizes correlated
+student score patterns, rank-maps scores onto reference assignment quantiles,
+models missingness separately from performance, and exports both a wide
+Canvas-style gradebook and long-form student-assignment score records.
+
+Render the synthesis report:
+
+```bash
+make render-gradebook-report-html
+make render-gradebook-report-pdf
 ```
 
 The key portfolio message is:

@@ -1,0 +1,21 @@
+---
+title: "Quarto Toolchain Smoke Test"
+format: html
+---
+
+## Purpose
+
+This document verifies that the shared `~/repos` development container can render
+a Quarto document with embedded R code.
+
+```{r}
+library(jsonlite)
+
+toolchain_status <- list(
+  r_available = TRUE,
+  quarto_render = TRUE,
+  portfolio_project = "assessment-intelligence"
+)
+
+toJSON(toolchain_status, pretty = TRUE)
+```

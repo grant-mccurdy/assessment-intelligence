@@ -24,6 +24,7 @@ Allowed public artifacts:
 - fake students
 - fake teachers
 - fake sections
+- synthetic gradebook rows
 - synthetic score histories
 - aggregate metrics
 - methodology documentation
@@ -48,3 +49,6 @@ Before publishing or linking a dataset:
 4. Confirm fake labels are obvious and not real people.
 5. Confirm the README explains that data is synthetic.
 
+For gradebook reconstruction, exact assignment names and exact section labels
+should be treated as private unless deliberately reviewed and cleared. The
+public-safe generator sanitizes assignment-like columns by default.

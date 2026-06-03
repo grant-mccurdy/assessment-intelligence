@@ -19,6 +19,8 @@ The synthetic dataset can preserve useful analytical structure:
 
 - score distribution shape
 - completion and non-participation patterns
+- assignment-level missingness and score spread
+- student-level correlation across assignments
 - item-count constraints
 - course, grade, teacher, and section variation
 - fall/spring time-series behavior
@@ -57,6 +59,29 @@ has been reduced to calibration signal. A safe pattern is:
 
 The public repo should contain generated synthetic data and methodology, not the
 private export or the private profiling output.
+
+## Gradebook Reconstruction Approach
+
+The gradebook reconstruction workflow demonstrates a more sophisticated R
+synthesis pattern:
+
+1. Profile the private gradebook schema, standard LMS fields, assignment-like
+   columns, blank rates, numeric shape, and score ranges.
+2. Generate synthetic students with correlated latent factors for ability,
+   engagement, growth orientation, and submission risk.
+3. Generate assignment metadata with public-safe sequence, family, and
+   skill-domain labels.
+4. Produce synthetic scores from the latent model.
+5. Rank-map generated scores onto the private reference assignment quantiles so
+   marginal distributions look realistic without copying rows.
+6. Model missingness as a separate process from low performance.
+7. Export both a wide Canvas-style gradebook and a long-form
+   student-assignment score table.
+8. Validate schema fidelity, distribution fidelity, missingness similarity, and
+   identity-value non-overlap.
+
+This gives the public project an analytical dataset that behaves like a real LMS
+export while remaining fully synthetic.
 
 ## OpenAI-Assisted Enhancements
 

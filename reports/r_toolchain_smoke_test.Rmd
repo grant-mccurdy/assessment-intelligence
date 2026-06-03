@@ -1,0 +1,57 @@
+---
+title: "R Toolchain Smoke Test"
+output:
+  html_document:
+    toc: false
+  pdf_document:
+    toc: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+## Purpose
+
+This document verifies that the shared `~/repos` development container can run R,
+load common analysis packages, render R Markdown, and compile PDF output.
+
+## Package Check
+
+```{r package-check}
+required_packages <- c("tidyverse", "rmarkdown", "knitr", "jsonlite", "ggplot2")
+package_status <- data.frame(
+  package = required_packages,
+  available = vapply(required_packages, requireNamespace, logical(1), quietly = TRUE)
+)
+
+package_status
+```
+
+## Analysis Check
+
+```{r analysis-check}
+library(ggplot2)
+
+assessment_smoke <- data.frame(
+  assessment = paste("Checkpoint", 1:6),
+  average_score = c(72, 75, 78, 80, 83, 86),
+  completion_rate = c(0.82, 0.84, 0.86, 0.88, 0.91, 0.93)
+)
+
+summary(assessment_smoke)
+```
+
+## Plot Check
+
+```{r plot-check}
+ggplot(assessment_smoke, aes(x = assessment, y = average_score, group = 1)) +
+  geom_line(color = "#2563eb", linewidth = 1) +
+  geom_point(color = "#111827", size = 2) +
+  labs(
+    title = "Synthetic Assessment Smoke Test",
+    x = "Assessment",
+    y = "Average Score"
+  ) +
+  theme_minimal()
+```
