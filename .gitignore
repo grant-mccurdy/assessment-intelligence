@@ -12,6 +12,9 @@ data/calibration/
 reports/private/
 reports/r_toolchain_smoke_test.html
 reports/r_toolchain_smoke_test.pdf
+reports/r_toolchain_smoke_test.log
+reports/r_toolchain_smoke_test.tex
+reports/r_toolchain_smoke_test.knit.md
 reports/r_toolchain_smoke_test_files/
 reports/r_toolchain_smoke_test_cache/
 reports/quarto_toolchain_smoke_test.html

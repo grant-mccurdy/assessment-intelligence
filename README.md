@@ -149,6 +149,7 @@ This is not a Canvas reporting project. Canvas may be one possible data source o
 
 ## Status
 
-Public-safe scaffolding in progress. Synthetic-data methodology, privacy model,
-OpenAI-assisted reporting notes, validation script, and dry-run-first memo
-generator are now staged.
+Active public-safe build. Synthetic-data methodology, privacy model,
+OpenAI-assisted reporting notes, dashboard privacy validation, dry-run-first
+memo generation, R gradebook reconstruction, synthetic gradebook outputs, and
+public validation reports are now staged.

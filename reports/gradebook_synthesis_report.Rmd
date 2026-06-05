@@ -79,32 +79,39 @@ missingness_summary[order(-missingness_summary$records), ]
 ## Score Distribution
 
 ```{r score-distribution}
-completed_scores <- score_records[score_records$completed & !is.na(score_records$score_percent), ]
+completed_scores <- score_records[score_records$completed & !is.na(score_records$score), ]
+if (any(!is.na(completed_scores$score_percent))) {
+  completed_scores$score_metric <- completed_scores$score_percent
+  score_metric_label <- "Score percent"
+} else {
+  completed_scores$score_metric <- completed_scores$score
+  score_metric_label <- "Synthetic score"
+}
 
 data.frame(
-  Metric = c("Completed score records", "Mean score percent", "Median score percent", "Score percent SD"),
+  Metric = c("Completed score records", paste("Mean", score_metric_label), paste("Median", score_metric_label), paste(score_metric_label, "SD")),
   Value = c(
     nrow(completed_scores),
-    round(mean(completed_scores$score_percent), 1),
-    round(median(completed_scores$score_percent), 1),
-    round(sd(completed_scores$score_percent), 1)
+    round(mean(completed_scores$score_metric), 1),
+    round(median(completed_scores$score_metric), 1),
+    round(sd(completed_scores$score_metric), 1)
   )
 )
 ```
 
 ```{r score-plot}
 if (requireNamespace("ggplot2", quietly = TRUE)) {
-  ggplot2::ggplot(completed_scores, ggplot2::aes(score_percent)) +
+  ggplot2::ggplot(completed_scores, ggplot2::aes(score_metric)) +
     ggplot2::geom_histogram(binwidth = 5, fill = "#2563eb", color = "white") +
     ggplot2::facet_wrap(~ assignment_family) +
     ggplot2::labs(
       title = "Synthetic Score Distribution By Assignment Family",
-      x = "Score percent",
+      x = score_metric_label,
       y = "Completed records"
     ) +
     ggplot2::theme_minimal()
 } else {
-  hist(completed_scores$score_percent, breaks = 20, main = "Synthetic Score Distribution", xlab = "Score percent")
+  hist(completed_scores$score_metric, breaks = 20, main = "Synthetic Score Distribution", xlab = score_metric_label)
 }
 ```
 
@@ -112,7 +119,7 @@ if (requireNamespace("ggplot2", quietly = TRUE)) {
 
 ```{r latent-patterns}
 aggregate(
-  score_percent ~ ability_band + engagement_band,
+  score_metric ~ ability_band + engagement_band,
   data = completed_scores,
   FUN = function(x) round(mean(x), 1)
 )

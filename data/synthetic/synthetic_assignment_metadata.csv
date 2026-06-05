@@ -1,0 +1,29 @@
+"source_column_index","assignment_id","assignment_label","assignment_sequence","assignment_family","skill_domain","reference_nonblank_count","reference_blank_rate","reference_mean","reference_sd","reference_min","reference_p25","reference_p50","reference_p75","reference_max","difficulty_index","discrimination"
+12,"assignment_01","Assignment 12",1,"Diagnostic","Conceptual Fluency",1,0.9965,100,12,100,100,100,100,100,-6.411,1
+13,"assignment_02","Assignment 13",2,"Diagnostic","Procedural Accuracy",1,0.9965,100,12,100,100,100,100,100,-6.411,1
+14,"assignment_03","Assignment 14",3,"Diagnostic","Modeling And Application",1,0.9965,100,12,100,100,100,100,100,-6.411,1
+15,"assignment_04","Assignment 15",4,"Diagnostic","Evidence And Explanation",1,0.9965,100,12,100,100,100,100,100,-6.411,1
+16,"assignment_05","Assignment 16",5,"Diagnostic","Cumulative Retention",1,0.9965,20,12,20,20,20,20,20,0.256,1
+17,"assignment_06","Assignment 17",6,"Skill Practice","Conceptual Fluency",1,0.9965,2,12,2,2,2,2,2,1.756,1
+18,"assignment_07","Assignment 18",7,"Skill Practice","Procedural Accuracy",1,0.9965,10,12,10,2,2,2,10,1.089,1
+19,"assignment_08","Assignment 19",8,"Skill Practice","Modeling And Application",1,0.9965,10,12,10,2,2,2,10,1.089,1
+20,"assignment_09","Assignment 20",9,"Skill Practice","Evidence And Explanation",1,0.9965,10,12,10,2,2,2,10,1.089,1
+21,"assignment_10","Assignment 21",10,"Skill Practice","Cumulative Retention",1,0.9965,10,12,10,2,2,2,10,1.089,1
+22,"assignment_11","Assignment 22",11,"Skill Practice","Conceptual Fluency",1,0.9965,10,12,10,2,2,2,10,1.089,1
+23,"assignment_12","Assignment 23",12,"Skill Practice","Procedural Accuracy",1,0.9965,10,12,10,2,2,2,10,1.089,1
+24,"assignment_13","Assignment 24",13,"Skill Practice","Modeling And Application",1,0.9965,10,12,10,2,2,2,10,1.089,1
+25,"assignment_14","Assignment 25",14,"Concept Check","Evidence And Explanation",1,0.9965,10,12,10,2,2,2,10,1.089,1
+26,"assignment_15","Assignment 26",15,"Concept Check","Cumulative Retention",1,0.9965,10,12,10,2,2,2,10,1.089,1
+27,"assignment_16","Assignment 27",16,"Concept Check","Conceptual Fluency",1,0.9965,10,12,10,2,2,2,10,1.089,1
+28,"assignment_17","Assignment 28",17,"Concept Check","Procedural Accuracy",1,0.9965,10,12,10,2,2,2,10,1.089,1
+29,"assignment_18","Assignment 29",18,"Concept Check","Modeling And Application",1,0.9965,10,12,10,2,2,2,10,1.089,1
+30,"assignment_19","Assignment 30",19,"Concept Check","Evidence And Explanation",1,0.9965,10,12,10,2,2,2,10,1.089,1
+31,"assignment_20","Assignment 31",20,"Concept Check","Cumulative Retention",1,0.9965,10,12,10,2,2,2,10,1.089,1
+32,"assignment_21","Assignment 32",21,"Unit Assessment","Conceptual Fluency",1,0.9965,12,12,12,2,2,2,12,0.923,1
+33,"assignment_22","Assignment 33",22,"Unit Assessment","Procedural Accuracy",1,0.9965,10,12,10,2,2,2,10,1.089,1
+34,"assignment_23","Assignment 34",23,"Unit Assessment","Modeling And Application",1,0.9965,12,12,12,2,2,2,12,0.923,1
+35,"assignment_24","Assignment 35",24,"Unit Assessment","Evidence And Explanation",1,0.9965,10,12,10,2,2,2,10,1.089,1
+36,"assignment_25","Assignment 36",25,"Unit Assessment","Cumulative Retention",1,0.9965,10,12,10,2,2,2,10,1.089,1
+37,"assignment_26","Assignment 37",26,"Cumulative Review","Conceptual Fluency",1,0.9965,10,12,10,2,2,2,10,1.089,1
+38,"assignment_27","Assignment 38",27,"Cumulative Review","Procedural Accuracy",1,0.9965,10,12,10,2,2,2,10,1.089,1
+39,"assignment_28","Assignment 39",28,"Cumulative Review","Modeling And Application",1,0.9965,10,12,10,2,2,2,10,1.089,1

@@ -464,15 +464,27 @@ for (i in seq_len(nrow(profile))) {
   if (role == "student") {
     synthetic[[out_col]] <- sprintf("Synthetic Student %03d", seq_len(row_count))
   } else if (role == "id") {
-    synthetic[[out_col]] <- as.character(900000L + seq_len(row_count))
+    if (isTRUE(profile$mostly_numeric[[i]])) {
+      synthetic[[out_col]] <- 900000L + seq_len(row_count)
+    } else {
+      synthetic[[out_col]] <- sprintf("SYN-ID-%06d", seq_len(row_count))
+    }
   } else if (role == "sis_user_id") {
-    synthetic[[out_col]] <- sprintf("SYN%06d", seq_len(row_count))
+    if (isTRUE(profile$mostly_numeric[[i]])) {
+      synthetic[[out_col]] <- 700000L + seq_len(row_count)
+    } else {
+      synthetic[[out_col]] <- sprintf("SYN%06d", seq_len(row_count))
+    }
   } else if (role == "sis_login_id") {
     synthetic[[out_col]] <- sprintf("synthetic%03d", seq_len(row_count))
   } else if (role == "section") {
     synthetic[[out_col]] <- sections
   } else if (role %in% c("current_score", "final_score", "unposted_final_score")) {
-    synthetic[[out_col]] <- round(row_means, 2)
+    if (isTRUE(profile$mostly_numeric[[i]])) {
+      synthetic[[out_col]] <- round(row_means, 2)
+    } else {
+      synthetic[[out_col]] <- ""
+    }
   } else if (role %in% c("current_grade", "final_grade")) {
     synthetic[[out_col]] <- grade_values
   } else if (role == "assignment" && i %in% score_assignment_indices) {

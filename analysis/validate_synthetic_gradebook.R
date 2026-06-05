@@ -119,6 +119,12 @@ mean_gaps <- mean_gaps[!is.na(mean_gaps)]
 sd_gaps <- sd_gaps[!is.na(sd_gaps)]
 mean_gap_similarity <- if (length(mean_gaps)) mean(mean_gaps <= 8) else NA_real_
 sd_gap_similarity <- if (length(sd_gaps)) mean(sd_gaps <= 8) else NA_real_
+sd_gap_check <- is.na(sd_gap_similarity) || sd_gap_similarity >= 0.70
+sd_gap_detail <- if (is.na(sd_gap_similarity)) {
+  "insufficient_reference_spread; skipped"
+} else {
+  sprintf("assignment_columns_with_similar_spread=%.1f%%", 100 * sd_gap_similarity)
+}
 
 checks <- data.frame(
   Check = c(
@@ -142,7 +148,7 @@ checks <- data.frame(
     analytics_exists && analytics_identity_leaks == 0L,
     blank_similarity >= 0.75,
     !is.na(mean_gap_similarity) && mean_gap_similarity >= 0.75,
-    !is.na(sd_gap_similarity) && sd_gap_similarity >= 0.70,
+    sd_gap_check,
     analytics_exists && analytics_rows > 0L,
     analytics_exists && analytics_has_required_columns,
     metadata_exists && metadata_rows == length(score_indices)
@@ -155,7 +161,7 @@ checks <- data.frame(
     sprintf("overlap_count=%s", analytics_identity_leaks),
     sprintf("columns_with_similar_missingness=%.1f%%", 100 * blank_similarity),
     sprintf("assignment_columns_with_similar_mean=%.1f%%", 100 * mean_gap_similarity),
-    sprintf("assignment_columns_with_similar_spread=%.1f%%", 100 * sd_gap_similarity),
+    sd_gap_detail,
     sprintf("path=%s rows=%s", args$analytics_output, analytics_rows),
     sprintf("required_columns_present=%s", analytics_has_required_columns),
     sprintf("path=%s rows=%s expected=%s", args$metadata_output, metadata_rows, length(score_indices))
