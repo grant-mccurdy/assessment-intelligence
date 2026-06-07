@@ -1,4 +1,4 @@
-.PHONY: r-check r-setup toolchain-smoke toolchain-smoke-html toolchain-smoke-pdf toolchain-smoke-quarto assessment-pipeline gradebook-workflow gradebook-profile synthetic-gradebook validate-gradebook privacy-check memo render-report-html render-report-pdf render-gradebook-report-html render-gradebook-report-pdf clean-generated
+.PHONY: all r-check r-setup toolchain-smoke toolchain-smoke-html toolchain-smoke-pdf toolchain-smoke-quarto assessment-pipeline gradebook-workflow gradebook-profile synthetic-gradebook validate-gradebook privacy-check memo render-report-html render-report-pdf render-gradebook-report-html render-gradebook-report-pdf clean-generated
 
 PYTHON ?= python3
 RSCRIPT ?= Rscript --vanilla
@@ -8,6 +8,8 @@ SYNTHETIC_GRADEBOOK ?= data/synthetic/synthetic_gradebook.csv
 SYNTHETIC_SCORES_LONG ?= data/synthetic/synthetic_student_scores_long.csv
 SYNTHETIC_ASSIGNMENT_METADATA ?= data/synthetic/synthetic_assignment_metadata.csv
 DASHBOARD_JSON ?= ../grant-mccurdy.github.io/data/synthetic/assessment-dashboard.json
+
+all: privacy-check
 
 r-check:
 	Rscript --version
