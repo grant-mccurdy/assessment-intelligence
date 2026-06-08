@@ -1,0 +1,70 @@
+{
+  "extract_findings": [
+    {
+      "decision_question": "Which courses show the clearest Assignment 01 to Assignment 02 growth signals?",
+      "extract": "assignment_growth_by_course.csv",
+      "finding": "Contains 22 synthetic aggregate rows and 10 columns for this decision question.",
+      "rows": 22
+    },
+    {
+      "decision_question": "Which course sections have enough assessment evidence to compare performance?",
+      "extract": "course_section_performance.csv",
+      "finding": "Contains 50 synthetic aggregate rows and 16 columns for this decision question.",
+      "rows": 50
+    },
+    {
+      "decision_question": "Are LMS-style roster records reconciled before dashboard reporting?",
+      "extract": "lms_enrollment_reconciliation.csv",
+      "finding": "Contains 25 synthetic aggregate rows and 12 columns for this decision question.",
+      "rows": 25
+    },
+    {
+      "decision_question": "Where are non-participation zeros concentrated before interpreting achievement?",
+      "extract": "nonparticipation_by_group.csv",
+      "finding": "Contains 58 synthetic aggregate rows and 10 columns for this decision question.",
+      "rows": 58
+    },
+    {
+      "decision_question": "Which synthetic student readiness records can support readiness views?",
+      "extract": "student_readiness_extract.csv",
+      "finding": "Contains 287 synthetic aggregate rows and 19 columns for this decision question.",
+      "rows": 287
+    }
+  ],
+  "interpretation": [
+    "The extract set supports performance, growth, missingness, and roster-quality analysis without exposing raw private records.",
+    "The strongest portfolio signal is the distinction between participation/missingness and score evidence.",
+    "The hosted Supabase path is useful as a serving-layer demonstration while DuckDB remains the reproducible local baseline."
+  ],
+  "next_actions": [
+    "Keep the deterministic SQL extracts as the source of truth.",
+    "Add a small public data dictionary for each extract before expanding dashboard views.",
+    "Add a focused dashboard fixture for the readiness extract before expanding dashboard views."
+  ],
+  "overall_status": "portfolio_ready_with_known_limitations",
+  "portfolio_relevance": "This demonstrates a defensible AI-assisted analytics pattern: deterministic extraction first, then public-safe narrative review over aggregate synthetic artifacts.",
+  "quality_checks": [
+    {
+      "check": "Synthetic data boundary",
+      "evidence": "Input reports explicitly state that all records are synthetic and public-safe.",
+      "result": "pass"
+    },
+    {
+      "check": "Extract row counts",
+      "evidence": "Each discovered CSV extract has at least one row.",
+      "result": "pass"
+    },
+    {
+      "check": "Readiness availability",
+      "evidence": "student_readiness_extract.csv is present.",
+      "result": "pass"
+    }
+  ],
+  "review_summary": "The package contains 5 synthetic SQL extracts with 442 total aggregate rows. Extraction and interpretation remain separated, which is the right design for reproducibility.",
+  "risks": [
+    "The OpenAI review is advisory and should not become an input to downstream data generation or CSV exports.",
+    "Student-level readiness views should stay curated through the public view contract and should not expose raw LMS staging rows.",
+    "Future examples should continue using aggregate summaries rather than raw LMS rows or real learner records."
+  ],
+  "synthetic_disclosure": "All records are synthetic demo data and must not be interpreted as real student outcomes."
+}

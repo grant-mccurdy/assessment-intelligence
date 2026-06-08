@@ -1,0 +1,51 @@
+course_id,course_name,course_track,section_id,section_label,teacher_id,teacher_label,assignment_label,sequence_index,assessment_window,enrolled_students,present_students,nonparticipation_rate,avg_present_score,min_present_score,max_present_score
+MATH-ALG1,Algebra 1,regular,SEC-001,Algebra 1 - Synthetic Section 01,TCH-001,Teacher 01,Assignment 01,1,beginning_of_year,11,11,0.0,43.16,19.36,85.69
+MATH-ALG1,Algebra 1,regular,SEC-001,Algebra 1 - Synthetic Section 01,TCH-001,Teacher 01,Assignment 02,2,end_of_year,11,10,0.0909,48.86,32.21,83.92
+MATH-ALG1,Algebra 1,regular,SEC-002,Algebra 1 - Synthetic Section 02,TCH-001,Teacher 01,Assignment 01,1,beginning_of_year,10,10,0.0,28.13,8.2,48.3
+MATH-ALG1,Algebra 1,regular,SEC-002,Algebra 1 - Synthetic Section 02,TCH-001,Teacher 01,Assignment 02,2,end_of_year,10,10,0.0,37.13,20.43,49.07
+MATH-ALG2,Algebra 2,regular,SEC-009,Algebra 2 - Synthetic Section 09,TCH-002,Teacher 02,Assignment 01,1,beginning_of_year,18,18,0.0,55.59,16.13,86.87
+MATH-ALG2,Algebra 2,regular,SEC-009,Algebra 2 - Synthetic Section 09,TCH-002,Teacher 02,Assignment 02,2,end_of_year,18,16,0.1111,58.6,24.87,82.05
+MATH-ALG2,Algebra 2,regular,SEC-010,Algebra 2 - Synthetic Section 10,TCH-002,Teacher 02,Assignment 01,1,beginning_of_year,17,15,0.1176,48.45,12.0,89.82
+MATH-ALG2,Algebra 2,regular,SEC-010,Algebra 2 - Synthetic Section 10,TCH-002,Teacher 02,Assignment 02,2,end_of_year,17,14,0.1765,56.63,29.7,86.25
+MATH-ALG2-H,Honors Algebra 2,honors,SEC-011,Honors Algebra 2 - Synthetic Section 11,TCH-003,Teacher 03,Assignment 01,1,beginning_of_year,11,7,0.3636,51.08,19.08,73.62
+MATH-ALG2-H,Honors Algebra 2,honors,SEC-011,Honors Algebra 2 - Synthetic Section 11,TCH-003,Teacher 03,Assignment 02,2,end_of_year,11,11,0.0,59.43,31.64,81.36
+MATH-ALG2-H,Honors Algebra 2,honors,SEC-012,Honors Algebra 2 - Synthetic Section 12,TCH-003,Teacher 03,Assignment 01,1,beginning_of_year,11,10,0.0909,37.96,8.68,84.19
+MATH-ALG2-H,Honors Algebra 2,honors,SEC-012,Honors Algebra 2 - Synthetic Section 12,TCH-003,Teacher 03,Assignment 02,2,end_of_year,11,11,0.0,47.66,27.1,81.58
+MATH-ALG2-H,Honors Algebra 2,honors,SEC-013,Honors Algebra 2 - Synthetic Section 13,TCH-003,Teacher 03,Assignment 01,1,beginning_of_year,11,10,0.0909,46.15,9.23,84.38
+MATH-ALG2-H,Honors Algebra 2,honors,SEC-013,Honors Algebra 2 - Synthetic Section 13,TCH-003,Teacher 03,Assignment 02,2,end_of_year,11,11,0.0,54.03,24.46,82.91
+MATH-ALG2-H,Honors Algebra 2,honors,SEC-014,Honors Algebra 2 - Synthetic Section 14,TCH-003,Teacher 03,Assignment 01,1,beginning_of_year,10,9,0.1,59.9,7.73,91.23
+MATH-ALG2-H,Honors Algebra 2,honors,SEC-014,Honors Algebra 2 - Synthetic Section 14,TCH-003,Teacher 03,Assignment 02,2,end_of_year,10,10,0.0,67.56,28.84,89.13
+MATH-AP-CALC-AB,AP Calculus AB,ap,SEC-020,AP Calculus AB - Synthetic Section 20,TCH-004,Teacher 04,Assignment 01,1,beginning_of_year,13,13,0.0,56.03,15.89,98.96
+MATH-AP-CALC-AB,AP Calculus AB,ap,SEC-020,AP Calculus AB - Synthetic Section 20,TCH-004,Teacher 04,Assignment 02,2,end_of_year,13,11,0.1538,57.55,29.31,87.43
+MATH-AP-CALC-AB,AP Calculus AB,ap,SEC-021,AP Calculus AB - Synthetic Section 21,TCH-005,Teacher 05,Assignment 01,1,beginning_of_year,12,12,0.0,51.25,19.1,91.56
+MATH-AP-CALC-AB,AP Calculus AB,ap,SEC-021,AP Calculus AB - Synthetic Section 21,TCH-005,Teacher 05,Assignment 02,2,end_of_year,12,12,0.0,57.62,36.62,92.3
+MATH-AP-CALC-AB,AP Calculus AB,ap,SEC-022,AP Calculus AB - Synthetic Section 22,TCH-005,Teacher 05,Assignment 01,1,beginning_of_year,12,11,0.0833,49.99,30.11,97.82
+MATH-AP-CALC-AB,AP Calculus AB,ap,SEC-022,AP Calculus AB - Synthetic Section 22,TCH-005,Teacher 05,Assignment 02,2,end_of_year,12,12,0.0,56.3,39.93,87.96
+MATH-AP-CALC-AB,AP Calculus AB,ap,SEC-023,AP Calculus AB - Synthetic Section 23,TCH-005,Teacher 05,Assignment 01,1,beginning_of_year,12,12,0.0,45.63,23.14,77.87
+MATH-AP-CALC-AB,AP Calculus AB,ap,SEC-023,AP Calculus AB - Synthetic Section 23,TCH-005,Teacher 05,Assignment 02,2,end_of_year,12,10,0.1667,52.69,36.99,73.87
+MATH-AP-CALC-BC,AP Calculus BC,ap,SEC-024,AP Calculus BC - Synthetic Section 24,TCH-005,Teacher 05,Assignment 01,1,beginning_of_year,12,12,0.0,52.36,31.48,86.93
+MATH-AP-CALC-BC,AP Calculus BC,ap,SEC-024,AP Calculus BC - Synthetic Section 24,TCH-005,Teacher 05,Assignment 02,2,end_of_year,12,12,0.0,57.44,35.39,83.05
+MATH-AP-CALC-BC,AP Calculus BC,ap,SEC-025,AP Calculus BC - Synthetic Section 25,TCH-005,Teacher 05,Assignment 01,1,beginning_of_year,11,11,0.0,53.06,13.78,91.27
+MATH-AP-CALC-BC,AP Calculus BC,ap,SEC-025,AP Calculus BC - Synthetic Section 25,TCH-005,Teacher 05,Assignment 02,2,end_of_year,11,11,0.0,57.54,26.64,87.45
+MATH-AP-PRECALC,AP Precalculus,ap,SEC-017,AP Precalculus - Synthetic Section 17,TCH-004,Teacher 04,Assignment 01,1,beginning_of_year,10,10,0.0,53.8,29.3,85.46
+MATH-AP-PRECALC,AP Precalculus,ap,SEC-017,AP Precalculus - Synthetic Section 17,TCH-004,Teacher 04,Assignment 02,2,end_of_year,10,10,0.0,61.55,47.6,83.54
+MATH-AP-PRECALC,AP Precalculus,ap,SEC-018,AP Precalculus - Synthetic Section 18,TCH-004,Teacher 04,Assignment 01,1,beginning_of_year,10,10,0.0,44.72,14.02,92.45
+MATH-AP-PRECALC,AP Precalculus,ap,SEC-018,AP Precalculus - Synthetic Section 18,TCH-004,Teacher 04,Assignment 02,2,end_of_year,10,9,0.1,51.73,26.81,90.12
+MATH-AP-PRECALC,AP Precalculus,ap,SEC-019,AP Precalculus - Synthetic Section 19,TCH-004,Teacher 04,Assignment 01,1,beginning_of_year,9,8,0.1111,51.51,16.53,70.73
+MATH-AP-PRECALC,AP Precalculus,ap,SEC-019,AP Precalculus - Synthetic Section 19,TCH-004,Teacher 04,Assignment 02,2,end_of_year,9,9,0.0,57.53,27.43,72.52
+MATH-GEOM,Geometry,regular,SEC-003,Geometry - Synthetic Section 03,TCH-001,Teacher 01,Assignment 01,1,beginning_of_year,12,12,0.0,37.62,18.02,76.68
+MATH-GEOM,Geometry,regular,SEC-003,Geometry - Synthetic Section 03,TCH-001,Teacher 01,Assignment 02,2,end_of_year,12,12,0.0,43.89,30.79,77.89
+MATH-GEOM,Geometry,regular,SEC-004,Geometry - Synthetic Section 04,TCH-001,Teacher 01,Assignment 01,1,beginning_of_year,12,10,0.1667,42.41,7.28,78.01
+MATH-GEOM,Geometry,regular,SEC-004,Geometry - Synthetic Section 04,TCH-001,Teacher 01,Assignment 02,2,end_of_year,12,10,0.1667,50.15,25.15,65.03
+MATH-GEOM,Geometry,regular,SEC-005,Geometry - Synthetic Section 05,TCH-001,Teacher 01,Assignment 01,1,beginning_of_year,12,12,0.0,48.97,17.4,88.88
+MATH-GEOM,Geometry,regular,SEC-005,Geometry - Synthetic Section 05,TCH-001,Teacher 01,Assignment 02,2,end_of_year,12,11,0.0833,52.92,31.12,75.79
+MATH-GEOM,Geometry,regular,SEC-006,Geometry - Synthetic Section 06,TCH-002,Teacher 02,Assignment 01,1,beginning_of_year,12,10,0.1667,37.74,12.36,85.53
+MATH-GEOM,Geometry,regular,SEC-006,Geometry - Synthetic Section 06,TCH-002,Teacher 02,Assignment 02,2,end_of_year,12,9,0.25,47.29,15.67,82.93
+MATH-GEOM,Geometry,regular,SEC-007,Geometry - Synthetic Section 07,TCH-002,Teacher 02,Assignment 01,1,beginning_of_year,12,10,0.1667,31.18,12.79,45.98
+MATH-GEOM,Geometry,regular,SEC-007,Geometry - Synthetic Section 07,TCH-002,Teacher 02,Assignment 02,2,end_of_year,12,11,0.0833,41.32,28.55,65.94
+MATH-GEOM,Geometry,regular,SEC-008,Geometry - Synthetic Section 08,TCH-002,Teacher 02,Assignment 01,1,beginning_of_year,11,10,0.0909,32.29,9.67,61.66
+MATH-GEOM,Geometry,regular,SEC-008,Geometry - Synthetic Section 08,TCH-002,Teacher 02,Assignment 02,2,end_of_year,11,10,0.0909,42.3,22.38,66.32
+MATH-PRECALC,Precalculus,regular,SEC-015,Precalculus - Synthetic Section 15,TCH-003,Teacher 03,Assignment 01,1,beginning_of_year,8,7,0.125,49.3,20.65,95.45
+MATH-PRECALC,Precalculus,regular,SEC-015,Precalculus - Synthetic Section 15,TCH-003,Teacher 03,Assignment 02,2,end_of_year,8,7,0.125,55.55,30.26,95.18
+MATH-PRECALC,Precalculus,regular,SEC-016,Precalculus - Synthetic Section 16,TCH-004,Teacher 04,Assignment 01,1,beginning_of_year,8,8,0.0,65.68,29.99,83.4
+MATH-PRECALC,Precalculus,regular,SEC-016,Precalculus - Synthetic Section 16,TCH-004,Teacher 04,Assignment 02,2,end_of_year,8,6,0.25,70.56,60.47,83.37

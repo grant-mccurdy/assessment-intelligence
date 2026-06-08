@@ -15,6 +15,7 @@ This repository is intended to demonstrate how assessment systems can be designe
 - Reproducible data processing
 - Department, school, course, class, teacher, and student-level reporting views
 - Decision-support dashboards and written reports
+- SQL-backed extracts from the `synthetic-education-data` DuckDB warehouse
 - Privacy-aware reporting architecture
 
 ## Planned Structure
@@ -141,6 +142,104 @@ quarto render docs/plot_catalog.qmd --to html
 
 Rendered plot images are written to `outputs/plots/`, and the synthetic catalog
 CSV files are written to `data/synthetic/`.
+
+## SQL Warehouse Integration
+
+The sibling `synthetic-education-data` project can generate a DuckDB warehouse from synthetic Canvas-like artifacts, assessment gradebooks, roster records, and star-schema marts.
+
+This project can query that warehouse and export analysis-ready assessment extracts:
+
+```bash
+cd ../synthetic-education-data
+make analytics-install
+make warehouse
+
+cd ../assessment-intelligence
+make analytics-install
+make synthetic-warehouse-extract
+```
+
+The extract target writes SQL-backed public-safe datasets to:
+
+```text
+data/external/synthetic-education-data/
+```
+
+and writes a summary report:
+
+```text
+reports/sql_warehouse_assessment_extract.md
+```
+
+Generate the analyst-facing SQL warehouse report:
+
+```bash
+make sql-warehouse-report
+```
+
+This writes:
+
+```text
+reports/sql_warehouse_assessment_report.md
+```
+
+See [docs/synthetic-warehouse-integration.md](docs/synthetic-warehouse-integration.md)
+for the build flow and [docs/sql-extract-data-dictionary.md](docs/sql-extract-data-dictionary.md)
+for the extract contract.
+
+Run the optional hosted Supabase extraction after local credentials are
+available in the shared local `.env` file:
+
+```bash
+SYNTHETIC_EDUCATION_SUPABASE_URL=...
+SYNTHETIC_EDUCATION_SUPABASE_PUBLISHABLE_KEY=...
+make supabase-extract
+make supabase-report
+```
+
+The hosted extract uses the Supabase Data API against selected public read-only
+views in the `synthetic-education-data` project. It writes hosted outputs to:
+
+```text
+data/external/synthetic-education-data-supabase/
+reports/supabase_assessment_extract.md
+reports/supabase_assessment_report.md
+```
+
+DuckDB remains the default reproducible local integration. Supabase is the
+optional hosted serving layer for public-safe synthetic analytics views. The
+hosted extract currently includes `student_readiness_extract.csv`; base `lms`
+and `analytics` tables remain outside the public API contract.
+
+Generate an OpenAI-assisted post-extract review without making a network call:
+
+```bash
+make ai-extract-review
+```
+
+This writes a prompt preview, structured review JSON, and Markdown review:
+
+```text
+reports/ai-extract-review-prompt.md
+reports/ai-extract-review.json
+reports/ai-extract-review.md
+```
+
+The API-enabled version is explicit and reads only OpenAI allowlisted variables
+from the shared local env file:
+
+```bash
+make ai-extract-review-api
+```
+
+OpenAI is used only as an advisory reporting layer over synthetic aggregate
+artifacts; it does not query Supabase directly or transform extract CSVs.
+
+Clean regenerated public report artifacts without touching private directories:
+
+```bash
+make clean-generated
+```
 
 Run the current validator against the GitHub Pages dashboard dataset:
 

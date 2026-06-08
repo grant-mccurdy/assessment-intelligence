@@ -22,6 +22,38 @@ not as a processor for raw private data.
 
 ## High-Value API Features
 
+### Post-Extract Review
+
+Use OpenAI after deterministic SQL extraction to review public-safe aggregate
+artifacts for portfolio readiness, quality checks, limitations, and next
+actions. The model does not query Supabase, edit CSVs, or become a source of
+truth for downstream data.
+
+Implemented script:
+
+```bash
+python3 scripts/generate_ai_extract_review.py
+```
+
+Default behavior is a dry run. It writes:
+
+```text
+reports/ai-extract-review-prompt.md
+reports/ai-extract-review.json
+reports/ai-extract-review.md
+```
+
+To make a real API call, pass an explicit flag and an optional env file after
+confirming the inputs are synthetic/public-safe:
+
+```bash
+python3 scripts/generate_ai_extract_review.py --env-file ../../.env --call-api
+```
+
+The API path uses the OpenAI Responses API with `store: false`. The extract
+review requests structured JSON output so the final Markdown report can be
+rendered deterministically.
+
 ### Leadership Memo Draft
 
 Use synthetic aggregate trends to draft a short memo:
@@ -52,8 +84,12 @@ synthetic/public-safe:
 python3 scripts/generate_ai_assessment_memo.py --call-api
 ```
 
-The script reads `OPENAI_API_KEY` only from the environment and does not read
-`.env` files.
+API scripts read `OPENAI_API_KEY` from the current environment. They can also
+load only OpenAI allowlisted variables from an explicit env file:
+
+```bash
+python3 scripts/generate_ai_assessment_memo.py --env-file ../../.env --call-api
+```
 
 ### Data Dictionary Assistant
 
@@ -74,3 +110,5 @@ skill labels and remediation categories.
 
 API scripts should default to dry-run or prompt-preview mode. A human should
 explicitly approve any networked call that could spend credits or process data.
+OpenAI output is advisory documentation only; it should not overwrite extract
+CSV files or feed downstream synthetic-data generation.

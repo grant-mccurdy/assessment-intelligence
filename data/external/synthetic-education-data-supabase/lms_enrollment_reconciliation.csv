@@ -1,0 +1,26 @@
+source_system,school_year,course_id,course_name,course_track,section_id,section_label,teacher_id,teacher_label,reconciliation_status,enrollment_rows,active_enrollments
+synthetic_canvas,2025-2026,MATH-ALG1,Algebra 1,regular,SEC-001,Algebra 1 - Synthetic Section 01,TCH-001,Teacher 01,matched,11,11
+synthetic_canvas,2025-2026,MATH-ALG1,Algebra 1,regular,SEC-002,Algebra 1 - Synthetic Section 02,TCH-001,Teacher 01,matched,10,10
+synthetic_canvas,2025-2026,MATH-ALG2,Algebra 2,regular,SEC-009,Algebra 2 - Synthetic Section 09,TCH-002,Teacher 02,matched,18,18
+synthetic_canvas,2025-2026,MATH-ALG2,Algebra 2,regular,SEC-010,Algebra 2 - Synthetic Section 10,TCH-002,Teacher 02,matched,17,17
+synthetic_canvas,2025-2026,MATH-ALG2-H,Honors Algebra 2,honors,SEC-011,Honors Algebra 2 - Synthetic Section 11,TCH-003,Teacher 03,matched,11,11
+synthetic_canvas,2025-2026,MATH-ALG2-H,Honors Algebra 2,honors,SEC-012,Honors Algebra 2 - Synthetic Section 12,TCH-003,Teacher 03,matched,11,11
+synthetic_canvas,2025-2026,MATH-ALG2-H,Honors Algebra 2,honors,SEC-013,Honors Algebra 2 - Synthetic Section 13,TCH-003,Teacher 03,matched,11,11
+synthetic_canvas,2025-2026,MATH-ALG2-H,Honors Algebra 2,honors,SEC-014,Honors Algebra 2 - Synthetic Section 14,TCH-003,Teacher 03,matched,10,10
+synthetic_canvas,2025-2026,MATH-AP-CALC-AB,AP Calculus AB,ap,SEC-020,AP Calculus AB - Synthetic Section 20,TCH-004,Teacher 04,matched,13,13
+synthetic_canvas,2025-2026,MATH-AP-CALC-AB,AP Calculus AB,ap,SEC-021,AP Calculus AB - Synthetic Section 21,TCH-005,Teacher 05,matched,12,12
+synthetic_canvas,2025-2026,MATH-AP-CALC-AB,AP Calculus AB,ap,SEC-022,AP Calculus AB - Synthetic Section 22,TCH-005,Teacher 05,matched,12,12
+synthetic_canvas,2025-2026,MATH-AP-CALC-AB,AP Calculus AB,ap,SEC-023,AP Calculus AB - Synthetic Section 23,TCH-005,Teacher 05,matched,12,12
+synthetic_canvas,2025-2026,MATH-AP-CALC-BC,AP Calculus BC,ap,SEC-024,AP Calculus BC - Synthetic Section 24,TCH-005,Teacher 05,matched,12,12
+synthetic_canvas,2025-2026,MATH-AP-CALC-BC,AP Calculus BC,ap,SEC-025,AP Calculus BC - Synthetic Section 25,TCH-005,Teacher 05,matched,11,11
+synthetic_canvas,2025-2026,MATH-AP-PRECALC,AP Precalculus,ap,SEC-017,AP Precalculus - Synthetic Section 17,TCH-004,Teacher 04,matched,10,10
+synthetic_canvas,2025-2026,MATH-AP-PRECALC,AP Precalculus,ap,SEC-018,AP Precalculus - Synthetic Section 18,TCH-004,Teacher 04,matched,10,10
+synthetic_canvas,2025-2026,MATH-AP-PRECALC,AP Precalculus,ap,SEC-019,AP Precalculus - Synthetic Section 19,TCH-004,Teacher 04,matched,9,9
+synthetic_canvas,2025-2026,MATH-GEOM,Geometry,regular,SEC-003,Geometry - Synthetic Section 03,TCH-001,Teacher 01,matched,12,12
+synthetic_canvas,2025-2026,MATH-GEOM,Geometry,regular,SEC-004,Geometry - Synthetic Section 04,TCH-001,Teacher 01,matched,12,12
+synthetic_canvas,2025-2026,MATH-GEOM,Geometry,regular,SEC-005,Geometry - Synthetic Section 05,TCH-001,Teacher 01,matched,12,12
+synthetic_canvas,2025-2026,MATH-GEOM,Geometry,regular,SEC-006,Geometry - Synthetic Section 06,TCH-002,Teacher 02,matched,12,12
+synthetic_canvas,2025-2026,MATH-GEOM,Geometry,regular,SEC-007,Geometry - Synthetic Section 07,TCH-002,Teacher 02,matched,12,12
+synthetic_canvas,2025-2026,MATH-GEOM,Geometry,regular,SEC-008,Geometry - Synthetic Section 08,TCH-002,Teacher 02,matched,11,11
+synthetic_canvas,2025-2026,MATH-PRECALC,Precalculus,regular,SEC-015,Precalculus - Synthetic Section 15,TCH-003,Teacher 03,matched,8,8
+synthetic_canvas,2025-2026,MATH-PRECALC,Precalculus,regular,SEC-016,Precalculus - Synthetic Section 16,TCH-004,Teacher 04,matched,8,8

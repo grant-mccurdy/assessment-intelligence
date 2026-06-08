@@ -10,15 +10,11 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
-import urllib.error
-import urllib.request
 from collections import defaultdict
 from pathlib import Path
 from typing import Any
 
-
-RESPONSES_URL = "https://api.openai.com/v1/responses"
+from openai_public_safe import call_openai_response, load_openai_config
 
 SYSTEM_PROMPT = (
     "You draft concise academic leadership memos from public-safe synthetic "
@@ -148,50 +144,6 @@ def build_user_prompt(summary: dict[str, Any]) -> str:
     )
 
 
-def extract_output_text(response_obj: dict[str, Any]) -> str:
-    if isinstance(response_obj.get("output_text"), str):
-        return response_obj["output_text"].strip()
-    parts: list[str] = []
-    for item in response_obj.get("output", []):
-        if item.get("type") != "message":
-            continue
-        for content in item.get("content", []):
-            if content.get("type") == "output_text":
-                parts.append(content.get("text", ""))
-            elif content.get("type") == "text":
-                parts.append(content.get("text", ""))
-    return "".join(parts).strip()
-
-
-def call_openai(api_key: str, model: str, user_prompt: str) -> str:
-    payload = {
-        "model": model,
-        "input": [
-            {"role": "system", "content": SYSTEM_PROMPT},
-            {"role": "user", "content": user_prompt},
-        ],
-    }
-    req = urllib.request.Request(
-        RESPONSES_URL,
-        data=json.dumps(payload).encode("utf-8"),
-        method="POST",
-    )
-    req.add_header("Authorization", f"Bearer {api_key}")
-    req.add_header("Content-Type", "application/json")
-    try:
-        with urllib.request.urlopen(req, timeout=120) as response:
-            response_obj = json.loads(response.read().decode("utf-8"))
-    except urllib.error.HTTPError as exc:
-        body = exc.read().decode("utf-8", errors="replace")
-        raise RuntimeError(f"OpenAI API returned HTTP {exc.code}: {body}") from exc
-    except urllib.error.URLError as exc:
-        raise RuntimeError(f"OpenAI API request failed: {exc.reason}") from exc
-    text = extract_output_text(response_obj)
-    if not text:
-        raise RuntimeError("OpenAI response did not include output text.")
-    return text
-
-
 def build_local_memo(summary: dict[str, Any]) -> str:
     strongest = ", ".join(f"{item['course']} (+{item['change']} pts)" for item in summary["strongest_growth"]) or "no course-level growth summary"
     completion_watch = ", ".join(f"{item['course']} ({item['completion']}%)" for item in summary["lowest_completion"]) or "no completion watch item"
@@ -241,11 +193,8 @@ def parse_args() -> argparse.Namespace:
         default="reports/ai-assessment-memo-prompt.md",
         help="Where to write the prompt preview.",
     )
-    parser.add_argument(
-        "--model",
-        default=os.environ.get("OPENAI_MODEL", "gpt-4.1"),
-        help="OpenAI model to use when --call-api is passed.",
-    )
+    parser.add_argument("--env-file", type=Path, help="Optional local env file. Only OpenAI variables are loaded.")
+    parser.add_argument("--model", help="OpenAI model to use when --call-api is passed.")
     parser.add_argument(
         "--call-api",
         action="store_true",
@@ -270,11 +219,15 @@ def main() -> int:
     write_text(Path(args.prompt_out), prompt_preview)
 
     if args.call_api:
-        api_key = os.environ.get("OPENAI_API_KEY")
-        if not api_key:
-            raise SystemExit("Missing OPENAI_API_KEY in environment.")
-        memo = call_openai(api_key, args.model, user_prompt)
-        mode = f"api:{args.model}"
+        config = load_openai_config(args.env_file, args.model)
+        memo = call_openai_response(
+            api_key=config.api_key,
+            model=config.model,
+            system_prompt=SYSTEM_PROMPT,
+            user_prompt=user_prompt,
+            max_output_tokens=1200,
+        )
+        mode = f"api:{config.model}"
     else:
         memo = build_local_memo(summary)
         mode = "dry-run-local"

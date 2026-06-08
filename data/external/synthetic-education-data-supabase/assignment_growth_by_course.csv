@@ -1,0 +1,23 @@
+grade_level,course_id,course_name,course_track,matched_students,assignment_01_avg,assignment_02_avg,avg_observed_growth_delta,min_observed_growth_delta,max_observed_growth_delta
+10,MATH-ALG1,Algebra 1,regular,2,55.02,56.54,1.52,-1.77,4.81
+10,MATH-ALG2,Algebra 2,regular,20,53.95,56.78,2.82,-8.26,15.47
+10,MATH-ALG2-H,Honors Algebra 2,honors,17,58.23,63.49,5.26,-3.84,19.67
+10,MATH-AP-CALC-AB,AP Calculus AB,ap,2,45.38,49.41,4.03,0.79,7.27
+10,MATH-AP-PRECALC,AP Precalculus,ap,10,51.35,59.02,7.67,-2.33,19.76
+10,MATH-GEOM,Geometry,regular,13,38.47,46.11,7.64,2.0,16.59
+10,MATH-PRECALC,Precalculus,regular,2,54.85,59.28,4.43,2.84,6.02
+11,MATH-ALG2,Algebra 2,regular,9,52.88,57.56,4.68,-7.41,17.7
+11,MATH-ALG2-H,Honors Algebra 2,honors,6,54.5,60.35,5.85,2.57,9.58
+11,MATH-AP-CALC-AB,AP Calculus AB,ap,18,54.47,60.2,5.74,-4.51,17.52
+11,MATH-AP-CALC-BC,AP Calculus BC,ap,4,38.04,42.74,4.7,-0.4,12.86
+11,MATH-AP-PRECALC,AP Precalculus,ap,8,50.76,57.32,6.56,-2.46,19.25
+11,MATH-GEOM,Geometry,regular,4,37.45,41.76,4.32,-0.44,9.35
+11,MATH-PRECALC,Precalculus,regular,5,50.25,55.32,5.06,-6.68,14.92
+12,MATH-AP-CALC-AB,AP Calculus AB,ap,24,47.12,53.21,6.09,-9.86,14.57
+12,MATH-AP-CALC-BC,AP Calculus BC,ap,19,55.78,60.59,4.81,-4.62,18.18
+12,MATH-AP-PRECALC,AP Precalculus,ap,6,45.36,51.78,6.42,-2.78,12.75
+12,MATH-PRECALC,Precalculus,regular,6,68.19,69.5,1.32,-8.41,9.1
+9,MATH-ALG1,Algebra 1,regular,18,33.04,41.49,8.46,0.21,14.91
+9,MATH-ALG2-H,Honors Algebra 2,honors,13,32.37,44.04,11.67,0.17,21.11
+9,MATH-AP-PRECALC,AP Precalculus,ap,3,49.48,56.54,7.06,-0.18,14.32
+9,MATH-GEOM,Geometry,regular,41,37.35,44.71,7.36,-3.93,21.88
