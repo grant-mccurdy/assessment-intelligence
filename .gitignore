@@ -20,6 +20,9 @@ reports/r_toolchain_smoke_test_cache/
 reports/quarto_toolchain_smoke_test.html
 reports/quarto_toolchain_smoke_test_files/
 reports/quarto_toolchain_smoke_test_cache/
+docs/.gitignore
+docs/.quarto/
+docs/**/*.quarto_ipynb
 
 # Keep renv metadata, but never commit the project-local package library.
 renv/library/

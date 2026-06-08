@@ -120,6 +120,28 @@ The key portfolio message is:
 > that generates synthetic assessment data, estimates growth and completion
 > patterns, and exports dashboard-ready JSON for a static web frontend.
 
+## Visualization Catalog
+
+The repository includes a small, decision-question-oriented visualization
+catalog at [docs/plot_catalog.qmd](docs/plot_catalog.qmd). The first release
+covers three public-safe assessment analytics plots:
+
+- Raincloud plot for comparing full score distributions.
+- Hexbin plot for dense readiness-growth relationships.
+- Calibration plot for evaluating predicted mastery probabilities.
+
+The catalog uses synthetic response events and model outputs only. Rebuild the
+catalog datasets and rendered PNGs with:
+
+```bash
+Rscript --vanilla R/plots/generate_plot_catalog_data.R
+Rscript --vanilla R/plots/render_plot_catalog_plots.R
+quarto render docs/plot_catalog.qmd --to html
+```
+
+Rendered plot images are written to `outputs/plots/`, and the synthetic catalog
+CSV files are written to `data/synthetic/`.
+
 Run the current validator against the GitHub Pages dashboard dataset:
 
 ```bash

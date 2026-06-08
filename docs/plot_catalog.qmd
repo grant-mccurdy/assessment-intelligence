@@ -1,0 +1,249 @@
+---
+title: "Assessment Intelligence Plot Catalog"
+format:
+  html:
+    toc: true
+    code-fold: false
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+```{r setup}
+library(dplyr)
+library(knitr)
+library(readr)
+
+find_repo_root <- function(start = getwd()) {
+  current <- normalizePath(start, mustWork = TRUE)
+  for (unused in seq_len(10)) {
+    if (file.exists(file.path(current, "DESCRIPTION")) &&
+        file.exists(file.path(current, "README.md"))) {
+      return(current)
+    }
+    parent <- dirname(current)
+    if (identical(parent, current)) {
+      break
+    }
+    current <- parent
+  }
+  stop("Could not find repository root.", call. = FALSE)
+}
+
+repo_root <- find_repo_root()
+repo_path <- function(...) file.path(repo_root, ...)
+```
+
+## Purpose
+
+This catalog is organized around analytical decision questions in assessment
+intelligence. It uses only synthetic response events, model outputs, and
+assessment metrics. It does not use real student, parent, school, employer,
+personnel, contact, job-search, private-note, credential, or `.env` data.
+
+The first version is intentionally small: raincloud, hexbin, and calibration
+plots. R is the primary implementation language because the repository is
+already R-first. Python is omitted in this MVP because it would add dependency
+surface without improving these three visuals.
+
+Rebuild the catalog inputs and rendered plots from the repository root:
+
+```bash
+Rscript --vanilla R/plots/generate_plot_catalog_data.R
+Rscript --vanilla R/plots/render_plot_catalog_plots.R
+quarto render docs/plot_catalog.qmd --to html
+```
+
+## Raincloud Plot
+
+**Analytical question**
+
+Which support model changes the full score distribution, not just the mean?
+
+**When to use it**
+
+Use a raincloud plot when the decision depends on distribution shape, outliers,
+spread, and summary statistics at the same time. In assessment intelligence, it
+is useful for comparing intervention groups, form versions, scoring conditions,
+or scoring policies.
+
+**When not to use it**
+
+Do not use it when there are too many groups to compare cleanly, when the sample
+size is tiny, or when the decision is only about a single threshold rate. For
+threshold questions, an ECDF or bar chart of rates is usually clearer.
+
+**Synthetic data example**
+
+```{r raincloud-data}
+read_csv(repo_path("data/synthetic/plot_catalog_assessment_scores.csv"), show_col_types = FALSE) %>%
+  select(response_id, support_model, assessment_window, score_percent, completion_time_minutes) %>%
+  slice_head(n = 6) %>%
+  kable()
+```
+
+**Rendered visual**
+
+```{r raincloud-visual, out.width="100%"}
+include_graphics(repo_path("outputs/plots/raincloud_assessment_distribution.png"))
+```
+
+**Brief interpretation**
+
+The synthetic AI practice group has the highest center and a tighter lower tail
+than the baseline review group. The baseline group has visibly more low-score
+mass, which would matter if the decision question is about reducing fragile
+mastery rather than simply raising the average.
+
+**R code**
+
+```{r raincloud-code, echo=TRUE, eval=FALSE}
+source("R/plots/plot_raincloud.R")
+
+plot_raincloud(
+  data_path = "data/synthetic/plot_catalog_assessment_scores.csv",
+  output_path = "outputs/plots/raincloud_assessment_distribution.png"
+)
+```
+
+Reusable source: [`R/plots/plot_raincloud.R`](../R/plots/plot_raincloud.R)
+
+**Portfolio relevance**
+
+This plot shows assessment analytics judgment: the point is not a flashy
+distribution chart, but a compact way to compare equity of outcomes, score
+spread, and intervention effects with public-safe data.
+
+## Hexbin Plot
+
+**Analytical question**
+
+Where is the dense relationship between readiness and growth hidden by
+overplotting?
+
+**When to use it**
+
+Use a hexbin plot when there are thousands of assessment events and a scatterplot
+would hide the actual data density. It is useful for readiness-growth
+relationships, predicted-vs-observed patterns, timing-vs-performance patterns,
+and other dense metric pairs.
+
+**When not to use it**
+
+Do not use it when individual observations must be audited one by one, when the
+sample size is small enough for a scatterplot, or when the binning resolution
+would change the interpretation. Binned density is a summary, not a substitute
+for record-level review.
+
+**Synthetic data example**
+
+```{r hexbin-data}
+read_csv(repo_path("data/synthetic/plot_catalog_dense_relationships.csv"), show_col_types = FALSE) %>%
+  select(response_id, readiness_index, practice_completion_rate, growth_points, assessment_form) %>%
+  slice_head(n = 6) %>%
+  kable()
+```
+
+**Rendered visual**
+
+```{r hexbin-visual, out.width="100%"}
+include_graphics(repo_path("outputs/plots/hexbin_readiness_growth.png"))
+```
+
+**Brief interpretation**
+
+The densest synthetic region sits around moderate-to-high readiness and positive
+growth. The relationship is nonlinear: growth rises more sharply in the upper
+readiness range. That pattern is useful for targeting follow-up modeling, but it
+should not be read as causal from the plot alone.
+
+**R code**
+
+```{r hexbin-code, echo=TRUE, eval=FALSE}
+source("R/plots/plot_hexbin.R")
+
+plot_hexbin(
+  data_path = "data/synthetic/plot_catalog_dense_relationships.csv",
+  output_path = "outputs/plots/hexbin_readiness_growth.png"
+)
+```
+
+Reusable source: [`R/plots/plot_hexbin.R`](../R/plots/plot_hexbin.R)
+
+**Portfolio relevance**
+
+This plot demonstrates practical learning analytics: dense assessment data often
+needs aggregation before a decision-maker can see the signal. The implementation
+uses a custom R hexbin routine, so the catalog does not require additional
+plotting packages for this MVP.
+
+## Calibration Plot
+
+**Analytical question**
+
+Can predicted mastery probabilities be trusted as probabilities?
+
+**When to use it**
+
+Use a calibration plot when an AI scorer, mastery model, or risk model outputs a
+probability and the decision depends on the probability being honest. A model
+with good ranking but bad calibration can still mislead threshold policies.
+
+**When not to use it**
+
+Do not use it as the only evaluation of a model. Calibration does not show
+ranking quality, subgroup fairness, construct validity, or whether the target
+itself is worth predicting. It also needs enough cases in each probability bin.
+
+**Synthetic data example**
+
+```{r calibration-data}
+read_csv(repo_path("data/synthetic/plot_catalog_calibration.csv"), show_col_types = FALSE) %>%
+  select(case_id, task_family, predicted_mastery_probability, observed_mastery) %>%
+  slice_head(n = 6) %>%
+  kable()
+```
+
+**Rendered visual**
+
+```{r calibration-visual, out.width="80%"}
+include_graphics(repo_path("outputs/plots/calibration_predicted_mastery.png"))
+```
+
+**Brief interpretation**
+
+The synthetic model is close to calibrated in the middle of the probability
+range, but high-probability bins fall below the dashed line. That indicates
+overconfidence: predictions near 80-90% mastery are followed by lower observed
+mastery rates.
+
+**R code**
+
+```{r calibration-code, echo=TRUE, eval=FALSE}
+source("R/plots/plot_calibration.R")
+
+plot_calibration(
+  data_path = "data/synthetic/plot_catalog_calibration.csv",
+  output_path = "outputs/plots/calibration_predicted_mastery.png"
+)
+```
+
+Reusable source: [`R/plots/plot_calibration.R`](../R/plots/plot_calibration.R)
+
+**Portfolio relevance**
+
+This plot connects assessment analytics to AI evaluation. It shows that the
+project can evaluate whether probabilistic claims are trustworthy, not merely
+whether a model produces plausible-looking scores.
+
+## Next Plots To Add
+
+The next three additions should be:
+
+1. ECDF plot for threshold and cumulative distribution questions.
+2. Agreement or Bland-Altman plot for human-vs-AI scoring agreement.
+3. Heatmap for skill-by-standard or model-by-task diagnostic patterns.
+
+Those three extend the catalog into threshold policy, scorer agreement, and
+diagnostic coverage without overbuilding the first release.
