@@ -147,7 +147,7 @@ def build_user_prompt(summary: dict[str, Any]) -> str:
 def build_local_memo(summary: dict[str, Any]) -> str:
     strongest = ", ".join(f"{item['course']} (+{item['change']} pts)" for item in summary["strongest_growth"]) or "no course-level growth summary"
     completion_watch = ", ".join(f"{item['course']} ({item['completion']}%)" for item in summary["lowest_completion"]) or "no completion watch item"
-    skill_watch = ", ".join(f"{item['skill']} ({item['signal']:+.1f})" for item in summary["lowest_skill_signals"][:3]) or "no skill watch item"
+    skill_watch = ", ".join(f"{item['skill']} ({item['signal']:.1f})" for item in summary["lowest_skill_signals"][:3]) or "no skill watch item"
     return f"""# Synthetic Assessment Leadership Memo Draft
 
 This memo is based on synthetic demo data and does not describe real students, teachers, sections, or a real school.

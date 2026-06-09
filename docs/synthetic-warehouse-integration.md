@@ -76,7 +76,12 @@ reports/sql_warehouse_assessment_report.md
 - `lms_enrollment_reconciliation.csv`
 - `student_readiness_extract.csv`
 
-These extracts are intended to become the first SQL-backed inputs for assessment reports and dashboards.
+These extracts are the shared SQL-backed inputs for assessment reports and the
+featured GitHub Pages dashboard. Refresh the static dashboard artifact with:
+
+```bash
+make dashboard-sync
+```
 
 Column definitions and row-grain details are maintained in
 [sql-extract-data-dictionary.md](sql-extract-data-dictionary.md).

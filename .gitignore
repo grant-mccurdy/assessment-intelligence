@@ -20,6 +20,17 @@ reports/r_toolchain_smoke_test_cache/
 reports/quarto_toolchain_smoke_test.html
 reports/quarto_toolchain_smoke_test_files/
 reports/quarto_toolchain_smoke_test_cache/
+
+# Local R/modeling outputs are reproducible and should not drive the hosted Pages dashboard.
+data/synthetic/assessment-dashboard.json
+data/synthetic/calibration_summary.csv
+data/synthetic/section_metadata.csv
+data/synthetic/section_period_summary.csv
+data/synthetic/student_level_assessment.csv
+reports/completion_model_predictions.csv
+reports/completion_model_summary.csv
+reports/growth_model_diagnostics.csv
+reports/growth_model_summary.csv
 docs/.gitignore
 docs/.quarto/
 docs/**/*.quarto_ipynb

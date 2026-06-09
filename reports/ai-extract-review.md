@@ -2,7 +2,7 @@
 
 Mode: `dry-run-local`
 
-Source: `data/external/synthetic-education-data-supabase`
+Source: `data/external/synthetic-education-data`
 
 All records are synthetic demo data and must not be interpreted as real student outcomes.
 
@@ -10,17 +10,17 @@ All records are synthetic demo data and must not be interpreted as real student 
 
 `portfolio_ready_with_known_limitations`
 
-The package contains 5 synthetic SQL extracts with 442 total aggregate rows. Extraction and interpretation remain separated, which is the right design for reproducibility.
+The package contains 5 synthetic SQL extracts with 3020 total aggregate rows. Extraction and interpretation remain separated, which is the right design for reproducibility.
 
 ## Extract Findings
 
 | Extract | Rows | Decision Question | Finding |
 | --- | --- | --- | --- |
-| assignment_growth_by_course.csv | 22 | Which courses show the clearest Assignment 01 to Assignment 02 growth signals? | Contains 22 synthetic aggregate rows and 10 columns for this decision question. |
-| course_section_performance.csv | 50 | Which course sections have enough assessment evidence to compare performance? | Contains 50 synthetic aggregate rows and 16 columns for this decision question. |
-| lms_enrollment_reconciliation.csv | 25 | Are LMS-style roster records reconciled before dashboard reporting? | Contains 25 synthetic aggregate rows and 12 columns for this decision question. |
-| nonparticipation_by_group.csv | 58 | Where are non-participation zeros concentrated before interpreting achievement? | Contains 58 synthetic aggregate rows and 10 columns for this decision question. |
-| student_readiness_extract.csv | 287 | Which synthetic student readiness records can support readiness views? | Contains 287 synthetic aggregate rows and 19 columns for this decision question. |
+| assignment_growth_by_course.csv | 27 | Which courses show the clearest Assignment 01 to Assignment 02 growth signals? | Contains 27 synthetic aggregate rows and 10 columns for this decision question. |
+| course_section_performance.csv | 348 | Which course sections have enough assessment evidence to compare performance? | Contains 348 synthetic aggregate rows and 16 columns for this decision question. |
+| lms_enrollment_reconciliation.csv | 174 | Are LMS-style roster records reconciled before dashboard reporting? | Contains 174 synthetic aggregate rows and 12 columns for this decision question. |
+| nonparticipation_by_group.csv | 462 | Where are non-participation zeros concentrated before interpreting achievement? | Contains 462 synthetic aggregate rows and 10 columns for this decision question. |
+| student_readiness_extract.csv | 2009 | Which synthetic student readiness records can support readiness views? | Contains 2009 synthetic aggregate rows and 21 columns for this decision question. |
 
 ## Quality Checks
 
@@ -34,7 +34,7 @@ The package contains 5 synthetic SQL extracts with 442 total aggregate rows. Ext
 
 - The extract set supports performance, growth, missingness, and roster-quality analysis without exposing raw private records.
 - The strongest portfolio signal is the distinction between participation/missingness and score evidence.
-- The hosted Supabase path is useful as a serving-layer demonstration while DuckDB remains the reproducible local baseline.
+- The DuckDB-backed extract path is the reproducible local baseline; hosted Supabase remains an optional serving-layer demonstration.
 
 ## Risks And Limitations
 

@@ -183,6 +183,17 @@ This writes:
 reports/sql_warehouse_assessment_report.md
 ```
 
+Build and sync the GitHub Pages dashboard artifact from the same SQL extract
+set:
+
+```bash
+make dashboard-sync
+```
+
+This writes `data/synthetic/assessment-dashboard.json` locally and syncs the
+static Pages copy at
+`../grant-mccurdy.github.io/data/synthetic/assessment-dashboard.json`.
+
 See [docs/synthetic-warehouse-integration.md](docs/synthetic-warehouse-integration.md)
 for the build flow and [docs/sql-extract-data-dictionary.md](docs/sql-extract-data-dictionary.md)
 for the extract contract.
@@ -246,6 +257,12 @@ Run the current validator against the GitHub Pages dashboard dataset:
 ```bash
 python3 scripts/validate_synthetic_privacy.py \
   --input ../grant-mccurdy.github.io/data/synthetic/assessment-dashboard.json
+```
+
+Refresh the static dashboard artifact consumed by GitHub Pages:
+
+```bash
+make dashboard-sync
 ```
 
 Generate a dry-run leadership memo from the same synthetic data:

@@ -1,6 +1,6 @@
 # SQL Warehouse Assessment Extract
 
-Generated: 2026-06-08 18:52:29 UTC
+Generated: 2026-06-09 20:08:50 UTC
 
 Source: `synthetic-education-data/warehouse/synthetic_math.duckdb`
 
@@ -14,25 +14,25 @@ This report verifies that `assessment-intelligence` can query public-safe synthe
 
 | Metric | Value |
 | --- | ---: |
-| Students | 287 |
+| Students | 696 |
 | Courses | 9 |
-| Sections | 25 |
-| Teachers | 5 |
+| Sections | 174 |
+| Teachers | 35 |
 | Assignments | 14 |
 | Assessment score fact rows | 4018 |
-| LMS enrollment fact rows | 287 |
-| Warehouse validation checks passing | 24 / 24 |
-| LMS roster records reconciled | 287 / 287 |
+| LMS enrollment fact rows | 2009 |
+| Warehouse validation checks passing | 20 / 20 |
+| LMS roster records reconciled | 2009 / 2009 |
 
 ## SQL Extracts
 
 | Extract | Rows |
 | --- | ---: |
-| `course_section_performance.csv` | 50 |
-| `assignment_growth_by_course.csv` | 22 |
-| `nonparticipation_by_group.csv` | 58 |
-| `lms_enrollment_reconciliation.csv` | 25 |
-| `student_readiness_extract.csv` | 287 |
+| `course_section_performance.csv` | 348 |
+| `assignment_growth_by_course.csv` | 27 |
+| `nonparticipation_by_group.csv` | 462 |
+| `lms_enrollment_reconciliation.csv` | 174 |
+| `student_readiness_extract.csv` | 2009 |
 
 ## Analysis Questions Supported
 

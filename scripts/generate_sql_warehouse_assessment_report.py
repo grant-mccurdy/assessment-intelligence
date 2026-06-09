@@ -155,11 +155,8 @@ def build_report(extract_dir: Path) -> str:
             for track in sorted(readiness_by_track)
         ]
 
-    populated_rows = [
-        row
-        for row in performance
-        if row["assignment_label"] in {"Assignment 01", "Assignment 02"}
-    ]
+    populated_rows = performance
+    assignment_count = len({row["assignment_label"] for row in populated_rows})
     avg_section_score = mean(
         [
             value
@@ -203,7 +200,7 @@ This report turns the synthetic SQL extracts into an analyst-facing assessment b
 ## Executive Summary
 
 - {readiness_summary}
-- The populated assessment windows support beginning-of-year to end-of-year comparisons, with an average section-level present-student score of {format_number(avg_section_score)}.
+- The populated extract contains {assignment_count} assessment windows, with an average section-level present-student score of {format_number(avg_section_score)}.
 - Average section-level non-participation across populated assessment windows is {format_rate(avg_nonparticipation)}, preserving the distinction between attendance/non-participation and academic score evidence.
 - LMS-style roster reconciliation is {matched_enrollment_rows} / {total_enrollment_rows} matched enrollment rows before downstream reporting.
 
@@ -230,7 +227,7 @@ This report turns the synthetic SQL extracts into an analyst-facing assessment b
 
 ## Limitations
 
-- The current public build contains two populated assessment windows; Assignments 03-14 remain intentionally blank until additional longitudinal transitions are implemented.
+- The current public build contains {assignment_count} populated assessment windows exported from the synthetic warehouse marts.
 - The hosted Supabase extract path reads selected public views from the synthetic warehouse; base `lms` and `analytics` tables remain outside the public API contract.
 - All records are synthetic and public-safe. This report must not be interpreted as containing real student outcomes.
 """

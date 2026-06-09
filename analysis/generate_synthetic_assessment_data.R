@@ -136,15 +136,23 @@ safe_mean <- function(x) {
   mean(x)
 }
 
+skill_column_name <- function(skill_name) {
+  paste0("skill_", gsub("[^A-Za-z0-9]+", "_", skill_name))
+}
+
 build_section_metadata <- function() {
   rows <- list()
+  all_skill_cols <- unique(unlist(lapply(skills_by_course, skill_column_name), use.names = FALSE))
   for (idx in seq_len(nrow(section_blueprints))) {
     section <- section_blueprints[idx, ]
     skill_names <- skills_by_course[[section$course]]
     skill_values <- round(runif(length(skill_names), -6.5, 6.5) + section$section_effect * 0.28, 1)
     row <- as.list(section)
+    for (skill_col in all_skill_cols) {
+      row[[skill_col]] <- NA_real_
+    }
     for (skill_idx in seq_along(skill_names)) {
-      row[[paste0("skill_", gsub("[^A-Za-z0-9]+", "_", skill_names[[skill_idx]]))]] <- skill_values[[skill_idx]]
+      row[[skill_column_name(skill_names[[skill_idx]])]] <- skill_values[[skill_idx]]
     }
     rows[[idx]] <- row
   }

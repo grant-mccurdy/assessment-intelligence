@@ -8,54 +8,55 @@ This report turns the synthetic SQL extracts into an analyst-facing assessment b
 
 | Extract | Rows |
 | --- | --- |
-| `course_section_performance.csv` | 50 |
-| `assignment_growth_by_course.csv` | 22 |
-| `nonparticipation_by_group.csv` | 58 |
-| `lms_enrollment_reconciliation.csv` | 25 |
-| `student_readiness_extract.csv` | 287 |
+| `course_section_performance.csv` | 348 |
+| `assignment_growth_by_course.csv` | 27 |
+| `nonparticipation_by_group.csv` | 462 |
+| `lms_enrollment_reconciliation.csv` | 174 |
+| `student_readiness_extract.csv` | 2009 |
 
 ## Executive Summary
 
-- The current SQL-backed extract set contains 287 synthetic student readiness records across 25 course-section roster groups.
-- The populated assessment windows support beginning-of-year to end-of-year comparisons, with an average section-level present-student score of 50.36.
-- Average section-level non-participation across populated assessment windows is 7.0%, preserving the distinction between attendance/non-participation and academic score evidence.
-- LMS-style roster reconciliation is 287 / 287 matched enrollment rows before downstream reporting.
+- The current SQL-backed extract set contains 2009 synthetic student readiness records across 174 course-section roster groups.
+- The populated extract contains 14 assessment windows, with an average section-level present-student score of 51.92.
+- Average section-level non-participation across populated assessment windows is 7.2%, preserving the distinction between attendance/non-participation and academic score evidence.
+- LMS-style roster reconciliation is 2009 / 2009 matched enrollment rows before downstream reporting.
 
 ## Highest Observed Growth By Course
 
 | Grade | Course | Track | Matched Students | Assignment 01 Avg | Assignment 02 Avg | Avg Delta |
 | --- | --- | --- | --- | --- | --- | --- |
-| 9 | Honors Algebra 2 | honors | 13 | 32.37 | 44.04 | 11.67 |
-| 9 | Algebra 1 | regular | 18 | 33.04 | 41.49 | 8.46 |
-| 10 | AP Precalculus | ap | 10 | 51.35 | 59.02 | 7.67 |
-| 10 | Geometry | regular | 13 | 38.47 | 46.11 | 7.64 |
-| 9 | Geometry | regular | 41 | 37.35 | 44.71 | 7.36 |
-| 9 | AP Precalculus | ap | 3 | 49.48 | 56.54 | 7.06 |
+| 10 | Algebra 1 | regular | 1 | 38.90 | 54.82 | 15.92 |
+| 9 | AP Precalculus | ap | 15 | 39.97 | 47.81 | 7.85 |
+| 9 | Honors Algebra 2 | honors | 86 | 45.92 | 53.18 | 7.26 |
+| 9 | Geometry | regular | 233 | 41.61 | 48.32 | 6.71 |
+| 10 | Algebra 2 | regular | 161 | 37.39 | 44.09 | 6.70 |
+| 10 | AP Precalculus | ap | 88 | 51.57 | 58.12 | 6.55 |
 
 ## Highest Non-Participation Groups
 
 | Assignment | Grade | Attendance | Track | Rows | Zeros | Rate |
 | --- | --- | --- | --- | --- | --- | --- |
-| Assignment 02 | 10 | at_risk | ap | 1 | 1 | 100.0% |
-| Assignment 02 | 10 | at_risk | regular | 4 | 3 | 75.0% |
-| Assignment 01 | 9 | at_risk | honors | 3 | 2 | 66.7% |
-| Assignment 01 | 11 | at_risk | regular | 5 | 3 | 60.0% |
-| Assignment 02 | 9 | at_risk | regular | 8 | 4 | 50.0% |
-| Assignment 01 | 11 | normal | honors | 5 | 2 | 40.0% |
+| Assignment 01 | 11 | at_risk | regular | 1 | 1 | 100.0% |
+| Assignment 02 | 10 | at_risk | honors | 1 | 1 | 100.0% |
+| Assignment 03 | 9 | at_risk | honors | 1 | 1 | 100.0% |
+| Assignment 03 | 12 | at_risk | regular | 1 | 1 | 100.0% |
+| Assignment 05 | 9 | normal | honors | 1 | 1 | 100.0% |
+| Assignment 05 | 12 | at_risk | beyond_core | 1 | 1 | 100.0% |
 
 ## Readiness By Track
 
 | Track | Records With Readiness | Avg Posterior Readiness | Avg Observed Growth |
 | --- | --- | --- | --- |
-| ap | 96 | 56.50 | 5.92 |
-| honors | 43 | 55.91 | 7.67 |
-| regular | 126 | 49.55 | 5.95 |
+| ap | 668 | 60.24 | 4.90 |
+| beyond_core | 27 | 71.91 | 3.08 |
+| honors | 215 | 62.41 | 6.12 |
+| regular | 950 | 46.12 | 6.30 |
 
 ## LMS Roster Reconciliation
 
 | Status | Course-Section Groups |
 | --- | --- |
-| matched | 25 |
+| matched | 174 |
 
 ## Dashboard And Reporting Uses
 
@@ -67,6 +68,6 @@ This report turns the synthetic SQL extracts into an analyst-facing assessment b
 
 ## Limitations
 
-- The current public build contains two populated assessment windows; Assignments 03-14 remain intentionally blank until additional longitudinal transitions are implemented.
+- The current public build contains 14 populated assessment windows exported from the synthetic warehouse marts.
 - The hosted Supabase extract path reads selected public views from the synthetic warehouse; base `lms` and `analytics` tables remain outside the public API contract.
 - All records are synthetic and public-safe. This report must not be interpreted as containing real student outcomes.

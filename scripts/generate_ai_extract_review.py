@@ -13,9 +13,9 @@ from openai_public_safe import assert_public_safe_text, call_openai_response, lo
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_EXTRACT_DIR = PROJECT_ROOT / "data" / "external" / "synthetic-education-data-supabase"
-DEFAULT_EXTRACT_REPORT = PROJECT_ROOT / "reports" / "supabase_assessment_extract.md"
-DEFAULT_ANALYST_REPORT = PROJECT_ROOT / "reports" / "supabase_assessment_report.md"
+DEFAULT_EXTRACT_DIR = PROJECT_ROOT / "data" / "external" / "synthetic-education-data"
+DEFAULT_EXTRACT_REPORT = PROJECT_ROOT / "reports" / "sql_warehouse_assessment_extract.md"
+DEFAULT_ANALYST_REPORT = PROJECT_ROOT / "reports" / "sql_warehouse_assessment_report.md"
 DEFAULT_PROMPT_OUT = PROJECT_ROOT / "reports" / "ai-extract-review-prompt.md"
 DEFAULT_JSON_OUT = PROJECT_ROOT / "reports" / "ai-extract-review.json"
 DEFAULT_REVIEW_OUT = PROJECT_ROOT / "reports" / "ai-extract-review.md"
@@ -289,7 +289,7 @@ def build_local_review(summary: dict[str, Any]) -> dict[str, Any]:
         "interpretation": [
             "The extract set supports performance, growth, missingness, and roster-quality analysis without exposing raw private records.",
             "The strongest portfolio signal is the distinction between participation/missingness and score evidence.",
-            "The hosted Supabase path is useful as a serving-layer demonstration while DuckDB remains the reproducible local baseline.",
+            "The DuckDB-backed extract path is the reproducible local baseline; hosted Supabase remains an optional serving-layer demonstration.",
         ],
         "risks": [
             "The OpenAI review is advisory and should not become an input to downstream data generation or CSV exports.",

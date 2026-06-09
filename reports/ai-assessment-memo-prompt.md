@@ -23,36 +23,68 @@ Synthetic summary:
 {
   "course_summaries": [
     {
-      "change": 19.8,
-      "completion": 100.0,
-      "course": "AP Statistics",
-      "latest_score": 78.6,
-      "proficiency": 61.4,
-      "students": 57
+      "change": -0.9,
+      "completion": 92.7,
+      "course": "AP Calculus AB",
+      "latest_score": 55.0,
+      "proficiency": 14.1,
+      "students": 55
     },
     {
-      "change": 11.7,
-      "completion": 93.5,
+      "change": 3.7,
+      "completion": 87.5,
+      "course": "AP Calculus BC",
+      "latest_score": 65.6,
+      "proficiency": 38.2,
+      "students": 24
+    },
+    {
+      "change": 14.4,
+      "completion": 100.0,
+      "course": "AP Precalculus",
+      "latest_score": 69.8,
+      "proficiency": 55.9,
+      "students": 34
+    },
+    {
+      "change": 17.9,
+      "completion": 100.0,
       "course": "Algebra 1",
-      "latest_score": 54.7,
-      "proficiency": 22.2,
-      "students": 77
+      "latest_score": 49.2,
+      "proficiency": 15.4,
+      "students": 13
     },
     {
-      "change": 18.0,
-      "completion": 98.7,
+      "change": -2.0,
+      "completion": 91.7,
+      "course": "Algebra 2",
+      "latest_score": 45.5,
+      "proficiency": 0.0,
+      "students": 36
+    },
+    {
+      "change": 6.1,
+      "completion": 95.9,
       "course": "Geometry",
-      "latest_score": 66.9,
-      "proficiency": 48.1,
-      "students": 76
+      "latest_score": 51.4,
+      "proficiency": 17.2,
+      "students": 48
     },
     {
-      "change": 28.2,
+      "change": 17.4,
       "completion": 100.0,
+      "course": "Honors Algebra 2",
+      "latest_score": 68.5,
+      "proficiency": 42.9,
+      "students": 28
+    },
+    {
+      "change": -6.4,
+      "completion": 93.3,
       "course": "Precalculus",
-      "latest_score": 79.1,
-      "proficiency": 67.3,
-      "students": 58
+      "latest_score": 46.0,
+      "proficiency": 0.0,
+      "students": 45
     }
   ],
   "guardrails": [
@@ -60,72 +92,68 @@ Synthetic summary:
     "Do not identify students, teachers, sections, or schools.",
     "Use the memo as a portfolio demonstration of assessment reporting workflow design."
   ],
-  "latest_completion": 97.8,
-  "latest_period": "Spring 2026",
-  "latest_proficiency": 47.6,
-  "latest_score": 68.5,
+  "latest_completion": 94.8,
+  "latest_period": "Assignment 14",
+  "latest_proficiency": 20.6,
+  "latest_score": 55.6,
   "lowest_completion": [
     {
-      "change": 11.7,
-      "completion": 93.5,
-      "course": "Algebra 1",
-      "latest_score": 54.7,
-      "proficiency": 22.2,
-      "students": 77
+      "change": 3.7,
+      "completion": 87.5,
+      "course": "AP Calculus BC",
+      "latest_score": 65.6,
+      "proficiency": 38.2,
+      "students": 24
     },
     {
-      "change": 18.0,
-      "completion": 98.7,
-      "course": "Geometry",
-      "latest_score": 66.9,
-      "proficiency": 48.1,
-      "students": 76
+      "change": -2.0,
+      "completion": 91.7,
+      "course": "Algebra 2",
+      "latest_score": 45.5,
+      "proficiency": 0.0,
+      "students": 36
     }
   ],
   "lowest_skill_signals": [
     {
-      "signal": -3.1,
-      "skill": "Circles"
+      "signal": 20.5,
+      "skill": "Proficiency"
     },
     {
-      "signal": -1.5,
-      "skill": "Rates"
+      "signal": 52.2,
+      "skill": "Readiness"
     },
     {
-      "signal": -0.9,
-      "skill": "Linear Models"
+      "signal": 55.6,
+      "skill": "Score"
     },
     {
-      "signal": -0.9,
-      "skill": "Trigonometry"
-    },
-    {
-      "signal": -0.9,
-      "skill": "Probability"
+      "signal": 94.9,
+      "skill": "Completion"
     }
   ],
-  "period_window": "Fall 2022 to Spring 2026",
-  "score_change_from_baseline": 19.2,
+  "period_window": "Assignment 01 to Assignment 14",
+  "score_change_from_baseline": 5.6,
   "source": "synthetic public dashboard JSON",
   "strongest_growth": [
     {
-      "change": 28.2,
+      "change": 17.9,
       "completion": 100.0,
-      "course": "Precalculus",
-      "latest_score": 79.1,
-      "proficiency": 67.3,
-      "students": 58
+      "course": "Algebra 1",
+      "latest_score": 49.2,
+      "proficiency": 15.4,
+      "students": 13
     },
     {
-      "change": 19.8,
+      "change": 17.4,
       "completion": 100.0,
-      "course": "AP Statistics",
-      "latest_score": 78.6,
-      "proficiency": 61.4,
-      "students": 57
+      "course": "Honors Algebra 2",
+      "latest_score": 68.5,
+      "proficiency": 42.9,
+      "students": 28
     }
   ],
-  "students_latest_period": 268,
-  "synthetic_disclosure": "Synthetic multi-year 30-question assessment data calibrated from a private assessment score distribution. No real students, rosters, teachers, sections, IDs, emails, grades, submissions, or school records are included."
+  "students_latest_period": 287,
+  "synthetic_disclosure": "Synthetic assessment dashboard data generated from the same SQL warehouse extracts used by assessment-intelligence report artifacts. No real students, rosters, teachers, sections, IDs, emails, grades, submissions, or school records are included."
 }
 ```

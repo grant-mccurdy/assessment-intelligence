@@ -1,14 +1,13 @@
 # R Analysis Pipeline
 
-GitHub Pages is static, so the browser dashboard cannot run R server-side. This
-project uses R as the build and analysis layer:
+GitHub Pages is static, so browser dashboards cannot run R server-side. This
+project keeps R as a modeling and legacy dashboard-export lane:
 
 ```text
 R synthetic data generation
 -> R growth and completion modeling
 -> R Markdown modeling report
--> dashboard-ready JSON export
--> static JavaScript dashboard runtime
+-> dashboard-ready JSON export for local/modeling demos
 ```
 
 The gradebook reconstruction workflow is a second R build lane:
@@ -21,8 +20,9 @@ private Canvas-style gradebook
 -> validation and distribution-fidelity report
 ```
 
-This architecture showcases statistical modeling while keeping the deployed site
-fast, static, and public-safe.
+The featured GitHub Pages dashboard is now built from the SQL warehouse extract
+contract documented in `docs/synthetic-warehouse-integration.md`; run
+`make dashboard-sync` to refresh that public artifact.
 
 Reporting artifacts should follow the companion philosophy in
 `docs/reporting-artifact-philosophy.md`: recommendation first, then data audit,
@@ -91,12 +91,16 @@ Rscript analysis/run_pipeline.R \
   --score-column 9
 ```
 
-To sync the exported JSON into the GitHub Pages dashboard after the R pipeline
-runs:
+Run the SQL-backed dashboard sync for the featured GitHub Pages artifact:
 
 ```bash
-Rscript analysis/export_dashboard_json.R \
-  --pages-output ../grant-mccurdy.github.io/data/synthetic/assessment-dashboard.json
+make dashboard-sync
+```
+
+To regenerate the R modeling JSON only, use:
+
+```bash
+Rscript analysis/export_dashboard_json.R
 ```
 
 ## Recommended R Packages

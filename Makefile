@@ -1,4 +1,4 @@
-.PHONY: all r-check r-setup analytics-install synthetic-warehouse-extract sql-warehouse-report supabase-extract supabase-report ai-extract-review ai-extract-review-api toolchain-smoke toolchain-smoke-html toolchain-smoke-pdf toolchain-smoke-quarto assessment-pipeline gradebook-workflow gradebook-profile synthetic-gradebook validate-gradebook privacy-check memo render-report-html render-report-pdf render-gradebook-report-html render-gradebook-report-pdf clean-generated
+.PHONY: all r-check r-setup analytics-install synthetic-warehouse-extract sql-warehouse-report supabase-extract supabase-report ai-extract-review ai-extract-review-api toolchain-smoke toolchain-smoke-html toolchain-smoke-pdf toolchain-smoke-quarto assessment-pipeline dashboard-sync gradebook-workflow gradebook-profile synthetic-gradebook validate-gradebook privacy-check memo render-report-html render-report-pdf render-gradebook-report-html render-gradebook-report-pdf clean-generated
 
 PYTHON ?= python3
 RSCRIPT ?= Rscript --vanilla
@@ -8,6 +8,7 @@ SYNTHETIC_GRADEBOOK ?= data/synthetic/synthetic_gradebook.csv
 SYNTHETIC_SCORES_LONG ?= data/synthetic/synthetic_student_scores_long.csv
 SYNTHETIC_ASSIGNMENT_METADATA ?= data/synthetic/synthetic_assignment_metadata.csv
 DASHBOARD_JSON ?= ../grant-mccurdy.github.io/data/synthetic/assessment-dashboard.json
+DASHBOARD_LOCAL_JSON ?= data/synthetic/assessment-dashboard.json
 SYNTHETIC_WAREHOUSE ?= ../synthetic-education-data/warehouse/synthetic_math.duckdb
 SYNTHETIC_WAREHOUSE_EXTRACT_DIR ?= data/external/synthetic-education-data
 SYNTHETIC_SUPABASE_EXTRACT_DIR ?= data/external/synthetic-education-data-supabase
@@ -42,10 +43,10 @@ supabase-report: supabase-extract
 	$(PYTHON) scripts/generate_sql_warehouse_assessment_report.py --extract-dir "$(SYNTHETIC_SUPABASE_EXTRACT_DIR)" --report "$(SUPABASE_ASSESSMENT_REPORT)"
 
 ai-extract-review:
-	$(PYTHON) scripts/generate_ai_extract_review.py --extract-dir "$(SYNTHETIC_SUPABASE_EXTRACT_DIR)" --extract-report "$(SUPABASE_EXTRACT_REPORT)" --analyst-report "$(SUPABASE_ASSESSMENT_REPORT)"
+	$(PYTHON) scripts/generate_ai_extract_review.py --extract-dir "$(SYNTHETIC_WAREHOUSE_EXTRACT_DIR)" --extract-report "reports/sql_warehouse_assessment_extract.md" --analyst-report "reports/sql_warehouse_assessment_report.md"
 
 ai-extract-review-api:
-	$(PYTHON) scripts/generate_ai_extract_review.py --extract-dir "$(SYNTHETIC_SUPABASE_EXTRACT_DIR)" --extract-report "$(SUPABASE_EXTRACT_REPORT)" --analyst-report "$(SUPABASE_ASSESSMENT_REPORT)" --env-file "$(OPENAI_ENV_FILE)" --call-api
+	$(PYTHON) scripts/generate_ai_extract_review.py --extract-dir "$(SYNTHETIC_WAREHOUSE_EXTRACT_DIR)" --extract-report "reports/sql_warehouse_assessment_extract.md" --analyst-report "reports/sql_warehouse_assessment_report.md" --env-file "$(OPENAI_ENV_FILE)" --call-api
 
 toolchain-smoke: r-check toolchain-smoke-html toolchain-smoke-pdf toolchain-smoke-quarto
 
@@ -60,6 +61,9 @@ toolchain-smoke-quarto:
 
 assessment-pipeline:
 	$(RSCRIPT) analysis/run_pipeline.R
+
+dashboard-sync: synthetic-warehouse-extract
+	$(PYTHON) scripts/build_sql_dashboard_json.py --extract-dir "$(SYNTHETIC_WAREHOUSE_EXTRACT_DIR)" --output "$(DASHBOARD_LOCAL_JSON)" --pages-output "$(DASHBOARD_JSON)"
 
 gradebook-workflow: gradebook-profile synthetic-gradebook validate-gradebook
 

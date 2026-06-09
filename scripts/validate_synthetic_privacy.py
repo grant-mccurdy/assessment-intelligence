@@ -124,7 +124,7 @@ def check_fake_identifiers(data: dict[str, Any], findings: list[Finding]) -> Non
     teacher_values = sorted(
         {str(row.get("teacher", "")) for row in data.get("sections", []) + data.get("records", []) if row.get("teacher")}
     )
-    bad_teachers = [value for value in teacher_values if not re.fullmatch(r"Teacher [A-Z]", value)]
+    bad_teachers = [value for value in teacher_values if not re.fullmatch(r"Teacher ([A-Z]|\d{2})", value)]
     if bad_teachers:
         add(findings, "warn", "synthetic teacher labels", f"Teacher labels should be clearly fake: {bad_teachers[:10]}")
     else:
@@ -173,8 +173,10 @@ def check_group_sizes(data: dict[str, Any], findings: list[Finding], min_group_s
 def check_bootstrap_disclosure(data: dict[str, Any], findings: list[Finding]) -> None:
     bootstrap = data.get("bootstrap", {})
     source_text = str(bootstrap.get("privateBootstrapSource", ""))
-    if "used only to calibrate" in source_text and "no private rows" in source_text:
-        add(findings, "pass", "bootstrap disclosure", "Bootstrap disclosure states that private data was used only for calibration.")
+    source_disclosure = str(data.get("source", {}).get("privacyDisclosure", ""))
+    combined = f"{source_text} {source_disclosure}"
+    if "no private rows" in combined and ("used only to calibrate" in combined or "public-safe synthetic" in combined):
+        add(findings, "pass", "bootstrap disclosure", "Disclosure states that private rows and identifiers are excluded.")
     else:
         add(findings, "warn", "bootstrap disclosure", "Add explicit language that private rows and identifiers are excluded.")
 
@@ -286,4 +288,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-
