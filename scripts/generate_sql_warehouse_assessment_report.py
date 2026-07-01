@@ -10,7 +10,7 @@ from pathlib import Path
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_EXTRACT_DIR = PROJECT_ROOT / "data" / "external" / "synthetic-education-data"
+DEFAULT_EXTRACT_DIR = PROJECT_ROOT / "data" / "external" / "education-data-simulation-engine"
 DEFAULT_REPORT_PATH = PROJECT_ROOT / "reports" / "sql_warehouse_assessment_report.md"
 
 
@@ -191,7 +191,7 @@ def build_report(extract_dir: Path) -> str:
 
 ## Purpose
 
-This report turns the synthetic SQL extracts into an analyst-facing assessment brief for `assessment-intelligence`. It verifies that the repo can consume SQL-backed marts from `synthetic-education-data` and use them for performance, growth, missingness, readiness when available, and LMS roster quality analysis.
+This report turns the synthetic SQL extracts into an analyst-facing assessment brief for `assessment-intelligence`. It verifies that the repo can consume SQL-backed marts from `education-data-simulation-engine` and use them for performance, growth, missingness, readiness when available, and LMS roster quality analysis.
 
 ## Source Extracts
 

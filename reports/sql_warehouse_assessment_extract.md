@@ -1,14 +1,14 @@
 # SQL Warehouse Assessment Extract
 
-Generated: 2026-06-09 20:08:50 UTC
+Generated: 2026-06-21 19:46:43 UTC
 
-Source: `synthetic-education-data/warehouse/synthetic_math.duckdb`
+Source: `education-data-simulation-engine/warehouse/synthetic_math.duckdb`
 
-Extract output directory: `data/external/synthetic-education-data`
+Extract output directory: `data/external/education-data-simulation-engine`
 
 ## Purpose
 
-This report verifies that `assessment-intelligence` can query public-safe synthetic marts from `synthetic-education-data` and produce SQL-backed assessment-analysis extracts.
+This report verifies that `assessment-intelligence` can query public-safe synthetic marts from `education-data-simulation-engine` and produce SQL-backed assessment-analysis extracts.
 
 ## Warehouse Summary
 

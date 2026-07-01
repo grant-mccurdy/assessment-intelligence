@@ -13,7 +13,7 @@ from openai_public_safe import assert_public_safe_text, call_openai_response, lo
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_EXTRACT_DIR = PROJECT_ROOT / "data" / "external" / "synthetic-education-data"
+DEFAULT_EXTRACT_DIR = PROJECT_ROOT / "data" / "external" / "education-data-simulation-engine"
 DEFAULT_EXTRACT_REPORT = PROJECT_ROOT / "reports" / "sql_warehouse_assessment_extract.md"
 DEFAULT_ANALYST_REPORT = PROJECT_ROOT / "reports" / "sql_warehouse_assessment_report.md"
 DEFAULT_PROMPT_OUT = PROJECT_ROOT / "reports" / "ai-extract-review-prompt.md"

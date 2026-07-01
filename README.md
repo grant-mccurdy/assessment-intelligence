@@ -1,22 +1,35 @@
 # Assessment Intelligence
 
-Public-safe assessment analytics and reporting project for mathematics programs.
+SQL/R/Python analytics dashboard and reporting project with public-safe data, validation checks, diagnostics, and decision-support outputs.
 
-This repository is intended to demonstrate how assessment systems can be designed, processed, analyzed, and reported using synthetic data. The goal is to show reproducible assessment intelligence workflows without exposing real students, grades, submissions, school records, or private LMS data.
+This repository is the main analytics product in the portfolio. It demonstrates how messy operating records can be transformed into reliable SQL extracts, dashboard-ready data, reproducible reports, model diagnostics, and stakeholder-facing interpretation. The education assessment domain is the case study; the transferable work is the analytics pattern.
+
+Synthetic data is used so the dashboard and reports can be public without exposing real students, grades, submissions, school records, or private LMS data.
 
 ## What This Project Demonstrates
 
-- Assessment system design
-- Synthetic assessment data generation
+- Interactive dashboard design over SQL-shaped extract data
+- SQL-backed extract design for performance, growth, completion, reconciliation, and readiness views
+- R/Python reporting workflows with validation-backed outputs
+- Data-quality and privacy checks before public release
+- Reproducible data processing and dashboard artifact export
+- Segment-level reporting views for decision support
+- Written reports, memos, and analyst-facing interpretation
+- Synthetic assessment data generation as the public-safety foundation
 - Real-to-synthetic distribution bootstrapping with public-safe outputs
-- Advanced R gradebook reconstruction using private-reference schema and
-  distribution profiling
-- Privacy and schema validation before release
-- Reproducible data processing
-- Department, school, course, class, teacher, and student-level reporting views
-- Decision-support dashboards and written reports
-- SQL-backed extracts from the `synthetic-education-data` DuckDB warehouse
+- Advanced R gradebook reconstruction using private-reference schema and distribution profiling
+- SQL-backed extracts from the `education-data-simulation-engine` DuckDB warehouse
 - Privacy-aware reporting architecture
+
+## Portfolio First Read
+
+Start with the hosted dashboard and reporting artifacts:
+
+- GitHub Pages dashboard: `https://grant-mccurdy.github.io/dashboard/assessment.html`
+- Portfolio brief: `https://grant-mccurdy.github.io/projects/assessment-intelligence.html`
+- Rendered R report mirrored on the portfolio site: `https://grant-mccurdy.github.io/artifacts/assessment-intelligence/gradebook_synthesis_report.html`
+
+Then inspect the synthetic data foundation only if you want to review how the public-safe records and warehouse extracts are generated.
 
 ## Planned Structure
 
@@ -53,9 +66,9 @@ assessment-intelligence/
 └── README.md
 ```
 
-## Synthetic Data Workflow
+## Data Privacy And Synthetic Foundation
 
-The central feature is a privacy-aware transformation pipeline:
+The public dashboard is backed by a privacy-aware transformation pipeline:
 
 ```text
 private assessment export
@@ -65,8 +78,10 @@ private assessment export
 -> public dashboard and reports
 ```
 
-The public project should show how useful analytics can be preserved without
-publishing real students, rosters, school-private exports, or LMS records.
+The public project shows how useful analytics can be preserved without
+publishing real students, rosters, school-private exports, or LMS records. The
+synthetic data work supports the dashboard and reports; it is not the main
+product surface.
 
 Reporting artifacts follow a recommendation-first statistical report philosophy:
 answer the leadership question, audit the data, show the model journey, present
@@ -115,6 +130,45 @@ make render-gradebook-report-html
 make render-gradebook-report-pdf
 ```
 
+## Evidence Packet
+
+The current public proof packet for the gradebook synthesis workflow is:
+
+```text
+data/synthetic/synthetic_gradebook.csv
+data/synthetic/synthetic_student_scores_long.csv
+data/synthetic/synthetic_assignment_metadata.csv
+reports/advanced_synthetic_gradebook_synthesis.md
+reports/gradebook_reference_schema_public.md
+reports/gradebook_reconstruction_validation.md
+reports/gradebook_synthesis_report.html
+reports/gradebook_synthesis_report.pdf
+```
+
+Current validation summary:
+
+- 287 synthetic gradebook rows and 39 columns.
+- 8,036 long-form synthetic student-assignment records.
+- 28 public-safe assignment metadata rows.
+- Zero identity overlap in the wide gradebook and long analytics output.
+- Numeric shape, row count, column count, missingness similarity, and assignment
+  mean fidelity checks pass.
+
+Rebuild the evidence packet from a private local reference path:
+
+```bash
+REFERENCE_GRADEBOOK="<private reference gradebook path>"
+make gradebook-workflow
+make render-gradebook-report-html
+make render-gradebook-report-pdf
+```
+
+The GitHub Pages portfolio mirrors the public-safe report artifacts under:
+
+```text
+artifacts/assessment-intelligence/
+```
+
 The key portfolio message is:
 
 > The dashboard is powered by a reproducible R statistical modeling pipeline
@@ -145,12 +199,12 @@ CSV files are written to `data/synthetic/`.
 
 ## SQL Warehouse Integration
 
-The sibling `synthetic-education-data` project can generate a DuckDB warehouse from synthetic Canvas-like artifacts, assessment gradebooks, roster records, and star-schema marts.
+The sibling `education-data-simulation-engine` project can generate a DuckDB warehouse from synthetic Canvas-like artifacts, assessment gradebooks, roster records, and star-schema marts.
 
 This project can query that warehouse and export analysis-ready assessment extracts:
 
 ```bash
-cd ../synthetic-education-data
+cd ../education-data-simulation-engine
 make analytics-install
 make warehouse
 
@@ -162,7 +216,7 @@ make synthetic-warehouse-extract
 The extract target writes SQL-backed public-safe datasets to:
 
 ```text
-data/external/synthetic-education-data/
+data/external/education-data-simulation-engine/
 ```
 
 and writes a summary report:
@@ -209,10 +263,10 @@ make supabase-report
 ```
 
 The hosted extract uses the Supabase Data API against selected public read-only
-views in the `synthetic-education-data` project. It writes hosted outputs to:
+views in the `education-data-simulation-engine` project. It writes hosted outputs to:
 
 ```text
-data/external/synthetic-education-data-supabase/
+data/external/education-data-simulation-engine-supabase/
 reports/supabase_assessment_extract.md
 reports/supabase_assessment_report.md
 ```

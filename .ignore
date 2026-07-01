@@ -1,0 +1,20 @@
+# Developer search hygiene. Use `rg -u` with a targeted path when generated
+# data or reports are explicitly needed.
+
+.git/
+renv/library/
+reports/quarto_toolchain_smoke_test_files/
+reports/r_toolchain_smoke_test.html
+reports/quarto_toolchain_smoke_test.html
+reports/gradebook_synthesis_report.html
+reports/gradebook_synthesis_report.pdf
+outputs/plots/
+data/private/
+data/synthetic/assessment-dashboard.json
+data/synthetic/synthetic_student_scores_long.csv
+data/external/
+
+*.log
+*.png
+*.pdf
+*.html

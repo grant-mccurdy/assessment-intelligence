@@ -2,7 +2,7 @@
 
 Mode: `dry-run-local`
 
-Source: `data/external/synthetic-education-data`
+Source: `data/external/education-data-simulation-engine`
 
 All records are synthetic demo data and must not be interpreted as real student outcomes.
 
