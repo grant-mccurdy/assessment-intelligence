@@ -13,15 +13,15 @@ from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_WAREHOUSE = ROOT.parent / "synthetic-education-data/warehouse/synthetic_math.duckdb"
-DEFAULT_DUCKDB_OUTPUT_DIR = ROOT / "data/external/synthetic-education-data"
-DEFAULT_SUPABASE_OUTPUT_DIR = ROOT / "data/external/synthetic-education-data-supabase"
+DEFAULT_WAREHOUSE = ROOT.parent / "education-data-simulation-engine/warehouse/synthetic_math.duckdb"
+DEFAULT_DUCKDB_OUTPUT_DIR = ROOT / "data/external/education-data-simulation-engine"
+DEFAULT_SUPABASE_OUTPUT_DIR = ROOT / "data/external/education-data-simulation-engine-supabase"
 DEFAULT_ENV_FILE = ROOT.parent.parent / ".env"
 EXTRACT_SQL_DIR = ROOT / "sql/extracts"
 POSTGRES_EXTRACT_SQL_DIR = ROOT / "sql/extracts_postgres"
 DUCKDB_REPORT_PATH = ROOT / "reports/sql_warehouse_assessment_extract.md"
 SUPABASE_REPORT_PATH = ROOT / "reports/supabase_assessment_extract.md"
-SUPABASE_PROJECT_NAME = "synthetic-education-data"
+SUPABASE_PROJECT_NAME = "education-data-simulation-engine"
 SUPABASE_API_BASE = "https://api.supabase.com"
 
 
@@ -97,7 +97,7 @@ def require_warehouse(path: Path) -> None:
     if not path.exists():
         raise SystemExit(
             f"Warehouse not found: {path}\n"
-            "Build it first with: cd ../synthetic-education-data && make warehouse"
+            "Build it first with: cd ../education-data-simulation-engine && make warehouse"
         )
 
 
@@ -326,7 +326,7 @@ def write_report(
         "",
         "## Purpose",
         "",
-        "This report verifies that `assessment-intelligence` can query public-safe synthetic marts from `synthetic-education-data` and produce SQL-backed assessment-analysis extracts.",
+        "This report verifies that `assessment-intelligence` can query public-safe synthetic marts from `education-data-simulation-engine` and produce SQL-backed assessment-analysis extracts.",
         "",
         "## Warehouse Summary",
         "",
@@ -439,11 +439,11 @@ def sort_key(row: dict[str, Any], columns: tuple[str, ...]) -> tuple[str, ...]:
 def run_supabase_data_api(args: argparse.Namespace, output_dir: Path, report_path: Path) -> None:
     env = load_env(args.env_file)
     supabase_url = env_first(
-        ("SYNTHETIC_EDUCATION_SUPABASE_URL",),
+        ("SYNTHETIC_EDUCATION_SUPABASE_URL", "PROJECT1_SUPABASE_URL"),
         env,
     )
     publishable_key = env_first(
-        ("SYNTHETIC_EDUCATION_SUPABASE_PUBLISHABLE_KEY",),
+        ("SYNTHETIC_EDUCATION_SUPABASE_PUBLISHABLE_KEY", "PROJECT1_SUPABASE_PUBLISHABLE_KEY"),
         env,
     )
     if not supabase_url or not publishable_key:
@@ -469,7 +469,7 @@ def run_supabase_data_api(args: argparse.Namespace, output_dir: Path, report_pat
 
     write_report(
         report_path,
-        "Supabase public Data API views from `synthetic-education-data`",
+        "Supabase public Data API views from `education-data-simulation-engine`",
         output_dir,
         extract_paths,
         data_api_summary(client),
@@ -483,7 +483,11 @@ def run_supabase_management_sql(args: argparse.Namespace, output_dir: Path, repo
     if not access_token:
         raise SystemExit("SUPABASE_ACCESS_TOKEN is required for Supabase extraction.")
 
-    project_ref = args.supabase_project_ref or find_supabase_project_ref(access_token, args.supabase_project_name)
+    project_ref = (
+        args.supabase_project_ref
+        or env_first(("SYNTHETIC_EDUCATION_SUPABASE_PROJECT_REF", "PROJECT1_SUPABASE_PROJECT_REF"), env)
+        or find_supabase_project_ref(access_token, args.supabase_project_name)
+    )
     client = SupabaseManagementSqlClient(access_token, project_ref)
     output_dir.mkdir(parents=True, exist_ok=True)
 

@@ -1,293 +1,180 @@
 # Assessment Intelligence
 
-Public-safe assessment analytics and reporting project for mathematics programs.
+Stakeholder-facing assessment analytics built from public-safe synthetic data.
 
-This repository is intended to demonstrate how assessment systems can be designed, processed, analyzed, and reported using synthetic data. The goal is to show reproducible assessment intelligence workflows without exposing real students, grades, submissions, school records, or private LMS data.
+Assessment Intelligence turns SQL-backed assessment records into an interactive
+dashboard, reproducible reports, data-quality checks, and decision notes that
+help instructional leaders answer four practical questions:
 
-## What This Project Demonstrates
+- Are students improving over time?
+- Where are performance or participation signals weakest?
+- Which courses or sections warrant closer review?
+- Is the underlying data reliable enough to support a decision?
 
-- Assessment system design
-- Synthetic assessment data generation
-- Real-to-synthetic distribution bootstrapping with public-safe outputs
-- Advanced R gradebook reconstruction using private-reference schema and
-  distribution profiling
-- Privacy and schema validation before release
-- Reproducible data processing
-- Department, school, course, class, teacher, and student-level reporting views
-- Decision-support dashboards and written reports
-- SQL-backed extracts from the `synthetic-education-data` DuckDB warehouse
-- Privacy-aware reporting architecture
+All public artifacts use synthetic students, teachers, sections, assessments,
+and outcomes. No real student, school, LMS, personnel, or employer data belongs
+in this repository.
 
-## Planned Structure
+## Start Here
+
+- [Open the live assessment dashboard](https://grant-mccurdy.github.io/dashboard/assessment.html)
+- [Read the concise portfolio brief](https://grant-mccurdy.github.io/projects/assessment-intelligence.html)
+- [Review the reporting case study](https://grant-mccurdy.github.io/case-studies/assessment-reporting.html)
+- [Inspect the rendered R synthesis report](https://grant-mccurdy.github.io/artifacts/assessment-intelligence/gradebook_synthesis_report.html)
+
+![Assessment dashboard overview](screenshots/dashboard-overview.png)
+
+The first dashboard view presents current score, growth, completion,
+proficiency, distribution, and readiness signals. Ranked decision insights use
+a minimum cohort size of 10 so small groups are not elevated as headline
+findings.
+
+![Stakeholder decision notes](screenshots/stakeholder-decision-notes.png)
+
+## What The Project Proves
+
+### Dashboard and stakeholder interpretation
+
+The deployed static dashboard provides browser-side filtering and aggregation,
+SVG charts, section detail, and generated decision notes over a public-safe SQL
+extract. The dashboard presentation is deployed from the portfolio repository:
+
+- [Dashboard HTML source](https://github.com/grant-mccurdy/grant-mccurdy.github.io/blob/main/dashboard/assessment.html)
+- [Dashboard JavaScript source](https://github.com/grant-mccurdy/grant-mccurdy.github.io/blob/main/assets/js/assessment-dashboard.js)
+- [Dashboard logic smoke test](https://github.com/grant-mccurdy/grant-mccurdy.github.io/blob/main/scripts/dashboard_logic_smoke.mjs)
+
+This repository owns the assessment extract contract, dashboard-data builder,
+statistical workflows, validation, and reporting artifacts. The portfolio repo
+owns the shared visual shell used to publish them.
+
+### SQL-backed analytics
+
+Five SQL extracts support distinct stakeholder questions:
+
+| Extract | Decision use |
+| --- | --- |
+| Course-section performance | Compare score, proficiency, completion, and participation signals. |
+| Assignment growth | Identify course-level movement using matched observations. |
+| Non-participation | Keep missing participation separate from achievement evidence. |
+| LMS reconciliation | Confirm roster records are reportable before analysis. |
+| Student readiness | Support curated readiness and observed-growth views. |
+
+DuckDB is the reproducible local baseline. Supabase is an optional hosted
+serving layer over selected public read-only views; it is not required to
+review or rebuild the local demo.
+
+### Reproducible statistical reporting
+
+The R workflows generate synthetic assessment records, fit growth and
+completion models, reconstruct a public-safe Canvas-style gradebook, validate
+distribution fidelity, and render stakeholder and analyst reports. The Python
+workflows extract SQL marts, build dashboard JSON, validate privacy boundaries,
+and generate deterministic report artifacts.
+
+## Architecture
 
 ```text
-assessment-intelligence/
-├── analysis/
-│   ├── generate_synthetic_assessment_data.R
-│   ├── profile_reference_schema.R
-│   ├── generate_synthetic_gradebook.R
-│   ├── validate_synthetic_gradebook.R
-│   ├── model_growth.R
-│   ├── model_completion.R
-│   ├── export_dashboard_json.R
-│   └── run_pipeline.R
-├── dashboard/
-├── data/
-│   └── synthetic/
-├── reports/
-│   └── assessment_modeling_report.Rmd
-├── notebooks/
-├── scripts/
-│   ├── validate_synthetic_privacy.py
-│   └── generate_ai_assessment_memo.py
-├── docs/
-│   ├── assessment-design.md
-│   ├── synthetic-data-methodology.md
-│   ├── r-analysis-pipeline.md
-│   ├── gradebook-reconstruction-workflow.md
-│   ├── reporting-artifact-philosophy.md
-│   ├── reporting-architecture.md
-│   ├── privacy-model.md
-│   └── openai-assisted-reporting.md
-├── screenshots/
-└── README.md
+education-data-simulation-engine
+  synthetic Canvas-style records and DuckDB marts
+                |
+                v
+assessment-intelligence
+  SQL extracts -> validation -> analysis -> reports -> dashboard JSON
+                |
+                v
+grant-mccurdy.github.io
+  static dashboard presentation and portfolio case study
 ```
 
-## Synthetic Data Workflow
+The separation is intentional:
 
-The central feature is a privacy-aware transformation pipeline:
+- `education-data-simulation-engine` owns public-safe source simulation.
+- `assessment-intelligence` owns assessment analytics and interpretation.
+- `grant-mccurdy.github.io` owns the deployed presentation shell.
 
-```text
-private assessment export
--> private profiling and calibration
--> synthetic student/section/time-series generator
--> validation report
--> public dashboard and reports
-```
+## Reproduce The SQL Reporting Path
 
-The public project should show how useful analytics can be preserved without
-publishing real students, rosters, school-private exports, or LMS records.
-
-Reporting artifacts follow a recommendation-first statistical report philosophy:
-answer the leadership question, audit the data, show the model journey, present
-checks and sensitivity, then close with a decision-ready bottom line.
-
-Gradebook reconstruction is public workflow, private data:
-
-```text
-private reference gradebook
--> public R reconstruction workflow
--> synthetic Canvas-style gradebook
--> long-form student-score analytics dataset
--> assignment metadata and validation report
--> public-safe analytics and reporting artifacts
-```
-
-The private reference artifacts remain in a separate private local repository;
-this repo contains the reproducible R workflow and public-safe outputs.
-
-## R Analysis Build Layer
-
-The dashboard frontend should remain static JavaScript for GitHub Pages. R is
-used before deployment to generate synthetic data, fit growth/completion models,
-render a modeling report, and export dashboard-ready JSON:
+Build the sibling synthetic warehouse:
 
 ```bash
-Rscript analysis/run_pipeline.R
-```
-
-Build a synthetic gradebook from a private reference artifact:
-
-```bash
-REFERENCE_GRADEBOOK="<private reference gradebook path>"
-make gradebook-workflow
-```
-
-This R workflow profiles the private gradebook shape, synthesizes correlated
-student score patterns, rank-maps scores onto reference assignment quantiles,
-models missingness separately from performance, and exports both a wide
-Canvas-style gradebook and long-form student-assignment score records.
-
-Render the synthesis report:
-
-```bash
-make render-gradebook-report-html
-make render-gradebook-report-pdf
-```
-
-The key portfolio message is:
-
-> The dashboard is powered by a reproducible R statistical modeling pipeline
-> that generates synthetic assessment data, estimates growth and completion
-> patterns, and exports dashboard-ready JSON for a static web frontend.
-
-## Visualization Catalog
-
-The repository includes a small, decision-question-oriented visualization
-catalog at [docs/plot_catalog.qmd](docs/plot_catalog.qmd). The first release
-covers three public-safe assessment analytics plots:
-
-- Raincloud plot for comparing full score distributions.
-- Hexbin plot for dense readiness-growth relationships.
-- Calibration plot for evaluating predicted mastery probabilities.
-
-The catalog uses synthetic response events and model outputs only. Rebuild the
-catalog datasets and rendered PNGs with:
-
-```bash
-Rscript --vanilla R/plots/generate_plot_catalog_data.R
-Rscript --vanilla R/plots/render_plot_catalog_plots.R
-quarto render docs/plot_catalog.qmd --to html
-```
-
-Rendered plot images are written to `outputs/plots/`, and the synthetic catalog
-CSV files are written to `data/synthetic/`.
-
-## SQL Warehouse Integration
-
-The sibling `synthetic-education-data` project can generate a DuckDB warehouse from synthetic Canvas-like artifacts, assessment gradebooks, roster records, and star-schema marts.
-
-This project can query that warehouse and export analysis-ready assessment extracts:
-
-```bash
-cd ../synthetic-education-data
+cd ../education-data-simulation-engine
 make analytics-install
 make warehouse
-
-cd ../assessment-intelligence
-make analytics-install
-make synthetic-warehouse-extract
 ```
 
-The extract target writes SQL-backed public-safe datasets to:
-
-```text
-data/external/synthetic-education-data/
-```
-
-and writes a summary report:
-
-```text
-reports/sql_warehouse_assessment_extract.md
-```
-
-Generate the analyst-facing SQL warehouse report:
+Generate the assessment extracts and analyst report:
 
 ```bash
+cd ../assessment-intelligence
+make analytics-install
 make sql-warehouse-report
 ```
 
-This writes:
-
-```text
-reports/sql_warehouse_assessment_report.md
-```
-
-Build and sync the GitHub Pages dashboard artifact from the same SQL extract
-set:
+Build the dashboard JSON and sync the portfolio deployment artifact:
 
 ```bash
 make dashboard-sync
 ```
 
-This writes `data/synthetic/assessment-dashboard.json` locally and syncs the
-static Pages copy at
-`../grant-mccurdy.github.io/data/synthetic/assessment-dashboard.json`.
-
-See [docs/synthetic-warehouse-integration.md](docs/synthetic-warehouse-integration.md)
-for the build flow and [docs/sql-extract-data-dictionary.md](docs/sql-extract-data-dictionary.md)
-for the extract contract.
-
-Run the optional hosted Supabase extraction after local credentials are
-available in the shared local `.env` file:
+Run the public dashboard privacy validator:
 
 ```bash
-SYNTHETIC_EDUCATION_SUPABASE_URL=...
-SYNTHETIC_EDUCATION_SUPABASE_PUBLISHABLE_KEY=...
-make supabase-extract
-make supabase-report
+make all
 ```
 
-The hosted extract uses the Supabase Data API against selected public read-only
-views in the `synthetic-education-data` project. It writes hosted outputs to:
+The validator checks required fields, forbidden identity fields and values,
+synthetic ID conventions, percentage bounds, cohort sizes, and disclosure of
+the private-to-synthetic boundary.
+
+## Secondary Evidence
+
+The repository also contains deeper proof for technical reviewers:
+
+- `sql/extracts/` and `sql/extracts_postgres/` define the DuckDB and hosted
+  extract contracts.
+- `scripts/build_sql_dashboard_json.py` converts those extracts into the
+  dashboard data model.
+- `reports/sql_warehouse_assessment_report.md` provides a generated analyst
+  brief with low-sample ranking safeguards.
+- `reports/gradebook_reconstruction_validation.md` documents synthetic
+  gradebook fidelity checks.
+- `outputs/plots/` contains decision-oriented raincloud, hexbin, and
+  calibration examples.
+- `docs/privacy-model.md` and `docs/synthetic-data-methodology.md` document the
+  public/private boundary and generation method.
+
+Large reproducible local outputs, including the full dashboard JSON and
+long-form score table, are intentionally ignored here. Reviewer-facing copies
+are either summarized in committed reports or deployed through the portfolio
+site.
+
+## Repository Layout
 
 ```text
-data/external/synthetic-education-data-supabase/
-reports/supabase_assessment_extract.md
-reports/supabase_assessment_report.md
+assessment-intelligence/
+|-- analysis/          # R generation, modeling, reconstruction, and validation
+|-- R/plots/           # Decision-oriented statistical visualizations
+|-- data/synthetic/    # Reviewed compact synthetic evidence
+|-- data/external/     # SQL-backed public-safe extracts
+|-- docs/              # Methodology, privacy, and data contracts
+|-- outputs/plots/     # Rendered public-safe plot examples
+|-- reports/           # Analyst, validation, and R Markdown artifacts
+|-- scripts/           # Extraction, dashboard export, privacy, and report tools
+|-- sql/               # DuckDB and PostgreSQL extract queries
+`-- screenshots/       # Recruiter-facing dashboard evidence
 ```
 
-DuckDB remains the default reproducible local integration. Supabase is the
-optional hosted serving layer for public-safe synthetic analytics views. The
-hosted extract currently includes `student_readiness_extract.csv`; base `lms`
-and `analytics` tables remain outside the public API contract.
+## Public-Safety Boundary
 
-Generate an OpenAI-assisted post-extract review without making a network call:
+Public artifacts must not contain real names, emails, IDs, grades, rosters,
+submissions, school records, private LMS links, credentials, tokens, or raw
+institutional exports. Private-reference workflows may inform synthetic shape
+and validation rules, but private rows and identifiers remain outside this
+repository.
 
-```bash
-make ai-extract-review
-```
+## Current Status
 
-This writes a prompt preview, structured review JSON, and Markdown review:
-
-```text
-reports/ai-extract-review-prompt.md
-reports/ai-extract-review.json
-reports/ai-extract-review.md
-```
-
-The API-enabled version is explicit and reads only OpenAI allowlisted variables
-from the shared local env file:
-
-```bash
-make ai-extract-review-api
-```
-
-OpenAI is used only as an advisory reporting layer over synthetic aggregate
-artifacts; it does not query Supabase directly or transform extract CSVs.
-
-Clean regenerated public report artifacts without touching private directories:
-
-```bash
-make clean-generated
-```
-
-Run the current validator against the GitHub Pages dashboard dataset:
-
-```bash
-python3 scripts/validate_synthetic_privacy.py \
-  --input ../grant-mccurdy.github.io/data/synthetic/assessment-dashboard.json
-```
-
-Refresh the static dashboard artifact consumed by GitHub Pages:
-
-```bash
-make dashboard-sync
-```
-
-Generate a dry-run leadership memo from the same synthetic data:
-
-```bash
-python3 scripts/generate_ai_assessment_memo.py
-```
-
-This writes a prompt preview and sample memo without calling the OpenAI API. To
-make a real API call, use `--call-api` after confirming the input is synthetic
-and public-safe.
-
-## Public Data Model
-
-All examples should use synthetic data. Public examples may include fake students, fake teachers, fake course sections, fake assessment items, and fake performance results.
-
-Public examples must not include real student names, emails, IDs, grades, rosters, submissions, Canvas exports, or school-private reporting artifacts.
-
-## Portfolio Framing
-
-This is not a Canvas reporting project. Canvas may be one possible data source or adapter, but the public framing is assessment intelligence: assessment design, analysis, reporting, and decision support.
-
-## Status
-
-Active public-safe build. Synthetic-data methodology, privacy model,
-OpenAI-assisted reporting notes, dashboard privacy validation, dry-run-first
-memo generation, R gradebook reconstruction, synthetic gradebook outputs, and
-public validation reports are now staged.
+The public dashboard, SQL extract path, R reporting workflows, optional hosted
+extract path, privacy validator, and recruiter-facing evidence are implemented.
+The next product-level improvement is to move the canonical dashboard bundle
+into this repository and make the portfolio site consume a generated release.

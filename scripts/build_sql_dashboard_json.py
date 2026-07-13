@@ -15,7 +15,7 @@ from typing import Any
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_EXTRACT_DIR = PROJECT_ROOT / "data" / "external" / "synthetic-education-data"
+DEFAULT_EXTRACT_DIR = PROJECT_ROOT / "data" / "external" / "education-data-simulation-engine"
 DEFAULT_OUTPUT = PROJECT_ROOT / "data" / "synthetic" / "assessment-dashboard.json"
 DEFAULT_ITEM_COUNT = 30
 MASTERY_SCORE = 70.0
@@ -342,7 +342,7 @@ def build_dashboard(extract_dir: Path) -> dict[str, Any]:
         "generated": date.today().isoformat(),
         "source": {
             "project": "assessment-intelligence",
-            "upstreamProject": "synthetic-education-data",
+            "upstreamProject": "education-data-simulation-engine",
             "pipeline": "make dashboard-sync",
             "builder": "scripts/build_sql_dashboard_json.py",
             "extractDir": rel(extract_dir),

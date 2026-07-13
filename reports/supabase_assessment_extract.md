@@ -2,13 +2,13 @@
 
 Generated: 2026-06-08 18:52:38 UTC
 
-Source: Supabase public Data API views from `synthetic-education-data`
+Source: Supabase public Data API views from `education-data-simulation-engine`
 
-Extract output directory: `data/external/synthetic-education-data-supabase`
+Extract output directory: `data/external/education-data-simulation-engine-supabase`
 
 ## Purpose
 
-This report verifies that `assessment-intelligence` can query public-safe synthetic marts from `synthetic-education-data` and produce SQL-backed assessment-analysis extracts.
+This report verifies that `assessment-intelligence` can query public-safe synthetic marts from `education-data-simulation-engine` and produce SQL-backed assessment-analysis extracts.
 
 ## Warehouse Summary
 

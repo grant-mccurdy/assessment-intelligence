@@ -24,7 +24,7 @@ Keep the review conservative and grounded in the supplied artifacts.
 Synthetic extract package:
 ```json
 {
-  "extract_directory": "data/external/synthetic-education-data",
+  "extract_directory": "data/external/education-data-simulation-engine",
   "extracts": [
     {
       "columns": [
@@ -86,7 +86,7 @@ Synthetic extract package:
           "min": -0.79
         }
       ],
-      "path": "data/external/synthetic-education-data/assignment_growth_by_course.csv",
+      "path": "data/external/education-data-simulation-engine/assignment_growth_by_course.csv",
       "rows": 27
     },
     {
@@ -155,7 +155,7 @@ Synthetic extract package:
           "min": 41.64
         }
       ],
-      "path": "data/external/synthetic-education-data/course_section_performance.csv",
+      "path": "data/external/education-data-simulation-engine/course_section_performance.csv",
       "rows": 348
     },
     {
@@ -190,7 +190,7 @@ Synthetic extract package:
           "min": 4.0
         }
       ],
-      "path": "data/external/synthetic-education-data/lms_enrollment_reconciliation.csv",
+      "path": "data/external/education-data-simulation-engine/lms_enrollment_reconciliation.csv",
       "rows": 174
     },
     {
@@ -249,7 +249,7 @@ Synthetic extract package:
           "min": 11.14
         }
       ],
-      "path": "data/external/synthetic-education-data/nonparticipation_by_group.csv",
+      "path": "data/external/education-data-simulation-engine/nonparticipation_by_group.csv",
       "rows": 462
     },
     {
@@ -327,7 +327,7 @@ Synthetic extract package:
           "min": 11.8766
         }
       ],
-      "path": "data/external/synthetic-education-data/student_readiness_extract.csv",
+      "path": "data/external/education-data-simulation-engine/student_readiness_extract.csv",
       "rows": 2009
     }
   ],
@@ -340,11 +340,11 @@ Synthetic extract package:
   "reports": {
     "analyst_report": {
       "path": "reports/sql_warehouse_assessment_report.md",
-      "text": "# SQL Warehouse Assessment Report\n\n## Purpose\n\nThis report turns the synthetic SQL extracts into an analyst-facing assessment brief for `assessment-intelligence`. It verifies that the repo can consume SQL-backed marts from `synthetic-education-data` and use them for performance, growth, missingness, readiness when available, and LMS roster quality analysis.\n\n## Source Extracts\n\n| Extract | Rows |\n| --- | --- |\n| `course_section_performance.csv` | 348 |\n| `assignment_growth_by_course.csv` | 27 |\n| `nonparticipation_by_group.csv` | 462 |\n| `lms_enrollment_reconciliation.csv` | 174 |\n| `student_readiness_extract.csv` | 2009 |\n\n## Executive Summary\n\n- The current SQL-backed extract set contains 2009 synthetic student readiness records across 174 course-section roster groups.\n- The populated extract contains 14 assessment windows, with an average section-level present-student score of 51.92.\n- Average section-level non-participation across populated assessment windows is 7.2%, preserving the distinction between attendance/non-participation and academic score evidence.\n- LMS-style roster reconciliation is 2009 / 2009 matched enrollment rows before downstream reporting.\n\n## Highest Observed Growth By Course\n\n| Grade | Course | Track | Matched Students | Assignment 01 Avg | Assignment 02 Avg | Avg Delta |\n| --- | --- | --- | --- | --- | --- | --- |\n| 10 | Algebra 1 | regular | 1 | 38.90 | 54.82 | 15.92 |\n| 9 | AP Precalculus | ap | 15 | 39.97 | 47.81 | 7.85 |\n| 9 | Honors Algebra 2 | honors | 86 | 45.92 | 53.18 | 7.26 |\n| 9 | Geometry | regular | 233 | 41.61 | 48.32 | 6.71 |\n| 10 | Algebra 2 | regular | 161 | 37.39 | 44.09 | 6.70 |\n| 10 | AP Precalculus | ap | 88 | 51.57 | 58.12 | 6.55 |\n\n## Highest Non-Participation Groups\n\n| Assignment | Grade | Attendance | Track | Rows | Zeros | Rate |\n| --- | --- | --- | --- | --- | --- | --- |\n| Assignment 01 | 11 | at_risk | regular | 1 | 1 | 100.0% |\n| Assignment 02 | 10 | at_risk | honors | 1 | 1 | 100.0% |\n| Assignment 03 | 9 | at_risk | honors | 1 | 1 | 100.0% |\n| Assignment 03 | 12 | at_risk | regular | 1 | 1 | 100.0% |\n| Assignment 05 | 9 | normal | honors | 1 | 1 | 100.0% |\n| Assignment 05 | 12 | at_risk | beyond_core | 1 | 1 | 100.0% |\n\n## Readiness By Track\n\n| Track | Records With Readiness | Avg Posterior Readiness | Avg Observed Growth |\n| --- | --- | --- | --- |\n| ap | 668 | 60.24 | 4.90 |\n| beyond_core | 27 | 71.91 | 3.08 |\n| honors | 215 | 62.41 | 6.12 |\n| regular | 950 | 46.12 | 6.30 |\n\n## LMS Roster Reconciliation\n\n| Status | Course-Section Groups |\n| --- | --- |\n| matched | 174 |\n\n## Dashboard And Reporting Uses\n\n- Course-section performance views can be built from `course_section_performance.csv`.\n- Growth diagnostics can use `assignment_growth_by_course.csv` first, then section-level extracts as the dashboard matures.\n- Attendance and missingness views should use `nonparticipation_by_group.csv` so observed zeros are not treated as academic evidence.\n- Data-quality cards can use `lms_enrollment_reconciliation.csv` to show whether LMS-derived rosters are reportable.\n- Student-level readiness views should use `student_readiness_extract.csv` only when that optional extract is present.\n\n## Limitations\n\n- The current public build contains 14 populated assessment windows exported from the synthetic warehouse marts.\n- The hosted Supabase extract path reads selected public views from the synthetic warehouse; base `lms` and `analytics` tables remain outside the public API contract.\n- All records are synthetic and public-safe. This report must not be interpreted as containing real student outcomes.\n"
+      "text": "# SQL Warehouse Assessment Report\n\n## Purpose\n\nThis report turns the synthetic SQL extracts into an analyst-facing assessment brief for `assessment-intelligence`. It verifies that the repo can consume SQL-backed marts from `education-data-simulation-engine` and use them for performance, growth, missingness, readiness when available, and LMS roster quality analysis.\n\n## Source Extracts\n\n| Extract | Rows |\n| --- | --- |\n| `course_section_performance.csv` | 348 |\n| `assignment_growth_by_course.csv` | 27 |\n| `nonparticipation_by_group.csv` | 462 |\n| `lms_enrollment_reconciliation.csv` | 174 |\n| `student_readiness_extract.csv` | 2009 |\n\n## Executive Summary\n\n- The current SQL-backed extract set contains 2009 synthetic student readiness records across 174 course-section roster groups.\n- The populated extract contains 14 assessment windows, with an average section-level present-student score of 51.92.\n- Average section-level non-participation across populated assessment windows is 7.2%, preserving the distinction between attendance/non-participation and academic score evidence.\n- LMS-style roster reconciliation is 2009 / 2009 matched enrollment rows before downstream reporting.\n\n## Highest Observed Growth By Course\n\n| Grade | Course | Track | Matched Students | Assignment 01 Avg | Assignment 02 Avg | Avg Delta |\n| --- | --- | --- | --- | --- | --- | --- |\n| 10 | Algebra 1 | regular | 1 | 38.90 | 54.82 | 15.92 |\n| 9 | AP Precalculus | ap | 15 | 39.97 | 47.81 | 7.85 |\n| 9 | Honors Algebra 2 | honors | 86 | 45.92 | 53.18 | 7.26 |\n| 9 | Geometry | regular | 233 | 41.61 | 48.32 | 6.71 |\n| 10 | Algebra 2 | regular | 161 | 37.39 | 44.09 | 6.70 |\n| 10 | AP Precalculus | ap | 88 | 51.57 | 58.12 | 6.55 |\n\n## Highest Non-Participation Groups\n\n| Assignment | Grade | Attendance | Track | Rows | Zeros | Rate |\n| --- | --- | --- | --- | --- | --- | --- |\n| Assignment 01 | 11 | at_risk | regular | 1 | 1 | 100.0% |\n| Assignment 02 | 10 | at_risk | honors | 1 | 1 | 100.0% |\n| Assignment 03 | 9 | at_risk | honors | 1 | 1 | 100.0% |\n| Assignment 03 | 12 | at_risk | regular | 1 | 1 | 100.0% |\n| Assignment 05 | 9 | normal | honors | 1 | 1 | 100.0% |\n| Assignment 05 | 12 | at_risk | beyond_core | 1 | 1 | 100.0% |\n\n## Readiness By Track\n\n| Track | Records With Readiness | Avg Posterior Readiness | Avg Observed Growth |\n| --- | --- | --- | --- |\n| ap | 668 | 60.24 | 4.90 |\n| beyond_core | 27 | 71.91 | 3.08 |\n| honors | 215 | 62.41 | 6.12 |\n| regular | 950 | 46.12 | 6.30 |\n\n## LMS Roster Reconciliation\n\n| Status | Course-Section Groups |\n| --- | --- |\n| matched | 174 |\n\n## Dashboard And Reporting Uses\n\n- Course-section performance views can be built from `course_section_performance.csv`.\n- Growth diagnostics can use `assignment_growth_by_course.csv` first, then section-level extracts as the dashboard matures.\n- Attendance and missingness views should use `nonparticipation_by_group.csv` so observed zeros are not treated as academic evidence.\n- Data-quality cards can use `lms_enrollment_reconciliation.csv` to show whether LMS-derived rosters are reportable.\n- Student-level readiness views should use `student_readiness_extract.csv` only when that optional extract is present.\n\n## Limitations\n\n- The current public build contains 14 populated assessment windows exported from the synthetic warehouse marts.\n- The hosted Supabase extract path reads selected public views from the synthetic warehouse; base `lms` and `analytics` tables remain outside the public API contract.\n- All records are synthetic and public-safe. This report must not be interpreted as containing real student outcomes.\n"
     },
     "extract_report": {
       "path": "reports/sql_warehouse_assessment_extract.md",
-      "text": "# SQL Warehouse Assessment Extract\n\nGenerated: 2026-06-09 20:08:50 UTC\n\nSource: `synthetic-education-data/warehouse/synthetic_math.duckdb`\n\nExtract output directory: `data/external/synthetic-education-data`\n\n## Purpose\n\nThis report verifies that `assessment-intelligence` can query public-safe synthetic marts from `synthetic-education-data` and produce SQL-backed assessment-analysis extracts.\n\n## Warehouse Summary\n\n| Metric | Value |\n| --- | ---: |\n| Students | 696 |\n| Courses | 9 |\n| Sections | 174 |\n| Teachers | 35 |\n| Assignments | 14 |\n| Assessment score fact rows | 4018 |\n| LMS enrollment fact rows | 2009 |\n| Warehouse validation checks passing | 20 / 20 |\n| LMS roster records reconciled | 2009 / 2009 |\n\n## SQL Extracts\n\n| Extract | Rows |\n| --- | ---: |\n| `course_section_performance.csv` | 348 |\n| `assignment_growth_by_course.csv` | 27 |\n| `nonparticipation_by_group.csv` | 462 |\n| `lms_enrollment_reconciliation.csv` | 174 |\n| `student_readiness_extract.csv` | 2009 |\n\n## Analysis Questions Supported\n\n- Which courses and sections show the strongest Assignment 01 to Assignment 02 growth?\n- Where are non-participation zeros concentrated by grade, course track, and attendance category?\n- Do Canvas-derived enrollment records reconcile with canonical synthetic enrollments before reporting?\n- Which star-schema tables should feed future dashboard views in `assessment-intelligence`?\n\n## Recommended Dashboard Inputs\n\n- `course_section_performance.csv` for section-level score views\n- `assignment_growth_by_course.csv` for growth diagnostics\n- `nonparticipation_by_group.csv` for missingness and attendance checks\n- `lms_enrollment_reconciliation.csv` for data-quality status\n- `student_readiness_extract.csv` for student-level synthetic readiness records\n\nAll records are synthetic and public-safe.\n"
+      "text": "# SQL Warehouse Assessment Extract\n\nGenerated: 2026-06-21 19:46:43 UTC\n\nSource: `education-data-simulation-engine/warehouse/synthetic_math.duckdb`\n\nExtract output directory: `data/external/education-data-simulation-engine`\n\n## Purpose\n\nThis report verifies that `assessment-intelligence` can query public-safe synthetic marts from `education-data-simulation-engine` and produce SQL-backed assessment-analysis extracts.\n\n## Warehouse Summary\n\n| Metric | Value |\n| --- | ---: |\n| Students | 696 |\n| Courses | 9 |\n| Sections | 174 |\n| Teachers | 35 |\n| Assignments | 14 |\n| Assessment score fact rows | 4018 |\n| LMS enrollment fact rows | 2009 |\n| Warehouse validation checks passing | 20 / 20 |\n| LMS roster records reconciled | 2009 / 2009 |\n\n## SQL Extracts\n\n| Extract | Rows |\n| --- | ---: |\n| `course_section_performance.csv` | 348 |\n| `assignment_growth_by_course.csv` | 27 |\n| `nonparticipation_by_group.csv` | 462 |\n| `lms_enrollment_reconciliation.csv` | 174 |\n| `student_readiness_extract.csv` | 2009 |\n\n## Analysis Questions Supported\n\n- Which courses and sections show the strongest Assignment 01 to Assignment 02 growth?\n- Where are non-participation zeros concentrated by grade, course track, and attendance category?\n- Do Canvas-derived enrollment records reconcile with canonical synthetic enrollments before reporting?\n- Which star-schema tables should feed future dashboard views in `assessment-intelligence`?\n\n## Recommended Dashboard Inputs\n\n- `course_section_performance.csv` for section-level score views\n- `assignment_growth_by_course.csv` for growth diagnostics\n- `nonparticipation_by_group.csv` for missingness and attendance checks\n- `lms_enrollment_reconciliation.csv` for data-quality status\n- `student_readiness_extract.csv` for student-level synthetic readiness records\n\nAll records are synthetic and public-safe.\n"
     }
   },
   "source": "public-safe synthetic SQL extracts",
