@@ -12,6 +12,7 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_EXTRACT_DIR = PROJECT_ROOT / "data" / "external" / "education-data-simulation-engine"
 DEFAULT_REPORT_PATH = PROJECT_ROOT / "reports" / "sql_warehouse_assessment_report.md"
+MIN_DECISION_GROUP_SIZE = 10
 
 
 def read_rows(path: Path) -> list[dict[str, str]]:
@@ -91,7 +92,11 @@ def build_report(extract_dir: Path) -> str:
     extract_rows = [[f"`{path.name}`", str(len(read_rows(path)))] for path in files.values()]
 
     growth_ranked = sorted(
-        growth,
+        [
+            row
+            for row in growth
+            if (to_float(row.get("matched_students")) or 0) >= MIN_DECISION_GROUP_SIZE
+        ],
         key=lambda row: to_float(row.get("avg_observed_growth_delta")) or -999,
         reverse=True,
     )
@@ -109,7 +114,12 @@ def build_report(extract_dir: Path) -> str:
     ]
 
     nonparticipation_ranked = sorted(
-        missingness,
+        [
+            row
+            for row in missingness
+            if (to_float(row.get("student_assignment_rows")) or 0)
+            >= MIN_DECISION_GROUP_SIZE
+        ],
         key=lambda row: to_float(row.get("nonparticipation_rate")) or -1,
         reverse=True,
     )
@@ -204,13 +214,17 @@ This report turns the synthetic SQL extracts into an analyst-facing assessment b
 - Average section-level non-participation across populated assessment windows is {format_rate(avg_nonparticipation)}, preserving the distinction between attendance/non-participation and academic score evidence.
 - LMS-style roster reconciliation is {matched_enrollment_rows} / {total_enrollment_rows} matched enrollment rows before downstream reporting.
 
-## Highest Observed Growth By Course
+## Highest Observed Growth By Course (n >= {MIN_DECISION_GROUP_SIZE})
 
 {table(["Grade", "Course", "Track", "Matched Students", "Assignment 01 Avg", "Assignment 02 Avg", "Avg Delta"], growth_table)}
 
-## Highest Non-Participation Groups
+Comparative rankings exclude groups with fewer than {MIN_DECISION_GROUP_SIZE} matched students.
+
+## Highest Non-Participation Groups (n >= {MIN_DECISION_GROUP_SIZE})
 
 {table(["Assignment", "Grade", "Attendance", "Track", "Rows", "Zeros", "Rate"], missingness_table)}
+
+Comparative rankings exclude groups with fewer than {MIN_DECISION_GROUP_SIZE} student-assignment rows.
 
 {readiness_section}
 ## LMS Roster Reconciliation
@@ -228,6 +242,7 @@ This report turns the synthetic SQL extracts into an analyst-facing assessment b
 ## Limitations
 
 - The current public build contains {assignment_count} populated assessment windows exported from the synthetic warehouse marts.
+- Small synthetic groups remain available for data-quality inspection but are excluded from ranked decision insights when n < {MIN_DECISION_GROUP_SIZE}.
 - The hosted Supabase extract path reads selected public views from the synthetic warehouse; base `lms` and `analytics` tables remain outside the public API contract.
 - All records are synthetic and public-safe. This report must not be interpreted as containing real student outcomes.
 """

@@ -21,27 +21,31 @@ This report turns the synthetic SQL extracts into an analyst-facing assessment b
 - Average section-level non-participation across populated assessment windows is 7.2%, preserving the distinction between attendance/non-participation and academic score evidence.
 - LMS-style roster reconciliation is 2009 / 2009 matched enrollment rows before downstream reporting.
 
-## Highest Observed Growth By Course
+## Highest Observed Growth By Course (n >= 10)
 
 | Grade | Course | Track | Matched Students | Assignment 01 Avg | Assignment 02 Avg | Avg Delta |
 | --- | --- | --- | --- | --- | --- | --- |
-| 10 | Algebra 1 | regular | 1 | 38.90 | 54.82 | 15.92 |
 | 9 | AP Precalculus | ap | 15 | 39.97 | 47.81 | 7.85 |
 | 9 | Honors Algebra 2 | honors | 86 | 45.92 | 53.18 | 7.26 |
 | 9 | Geometry | regular | 233 | 41.61 | 48.32 | 6.71 |
 | 10 | Algebra 2 | regular | 161 | 37.39 | 44.09 | 6.70 |
 | 10 | AP Precalculus | ap | 88 | 51.57 | 58.12 | 6.55 |
+| 9 | Algebra 1 | regular | 92 | 38.67 | 45.17 | 6.50 |
 
-## Highest Non-Participation Groups
+Comparative rankings exclude groups with fewer than 10 matched students.
+
+## Highest Non-Participation Groups (n >= 10)
 
 | Assignment | Grade | Attendance | Track | Rows | Zeros | Rate |
 | --- | --- | --- | --- | --- | --- | --- |
-| Assignment 01 | 11 | at_risk | regular | 1 | 1 | 100.0% |
-| Assignment 02 | 10 | at_risk | honors | 1 | 1 | 100.0% |
-| Assignment 03 | 9 | at_risk | honors | 1 | 1 | 100.0% |
-| Assignment 03 | 12 | at_risk | regular | 1 | 1 | 100.0% |
-| Assignment 05 | 9 | normal | honors | 1 | 1 | 100.0% |
-| Assignment 05 | 12 | at_risk | beyond_core | 1 | 1 | 100.0% |
+| Assignment 12 | 9 | normal | honors | 10 | 3 | 30.0% |
+| Assignment 06 | 9 | normal | regular | 19 | 5 | 26.3% |
+| Assignment 12 | 11 | normal | regular | 22 | 5 | 22.7% |
+| Assignment 01 | 10 | normal | regular | 25 | 5 | 20.0% |
+| Assignment 12 | 10 | normal | ap | 10 | 2 | 20.0% |
+| Assignment 12 | 11 | normal | ap | 21 | 4 | 19.1% |
+
+Comparative rankings exclude groups with fewer than 10 student-assignment rows.
 
 ## Readiness By Track
 
@@ -69,5 +73,6 @@ This report turns the synthetic SQL extracts into an analyst-facing assessment b
 ## Limitations
 
 - The current public build contains 14 populated assessment windows exported from the synthetic warehouse marts.
+- Small synthetic groups remain available for data-quality inspection but are excluded from ranked decision insights when n < 10.
 - The hosted Supabase extract path reads selected public views from the synthetic warehouse; base `lms` and `analytics` tables remain outside the public API contract.
 - All records are synthetic and public-safe. This report must not be interpreted as containing real student outcomes.
