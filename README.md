@@ -2,6 +2,13 @@
 
 Stakeholder-facing assessment analytics built from public-safe synthetic data.
 
+## Project Links
+
+- [Open the live assessment dashboard](https://grant-mccurdy.github.io/dashboard/assessment.html)
+- [Read the concise portfolio brief](https://grant-mccurdy.github.io/projects/assessment-intelligence.html)
+- [Review the reporting case study](https://grant-mccurdy.github.io/case-studies/assessment-reporting.html)
+- [Inspect the rendered R synthesis report](https://grant-mccurdy.github.io/artifacts/assessment-intelligence/gradebook_synthesis_report.html)
+
 Assessment Intelligence turns SQL-backed assessment records into an interactive
 dashboard, reproducible reports, data-quality checks, and decision notes that
 help instructional leaders answer four practical questions:
@@ -15,21 +22,10 @@ All public artifacts use synthetic students, teachers, sections, assessments,
 and outcomes. No real student, school, LMS, personnel, or employer data belongs
 in this repository.
 
-## Start Here
-
-- [Open the live assessment dashboard](https://grant-mccurdy.github.io/dashboard/assessment.html)
-- [Read the concise portfolio brief](https://grant-mccurdy.github.io/projects/assessment-intelligence.html)
-- [Review the reporting case study](https://grant-mccurdy.github.io/case-studies/assessment-reporting.html)
-- [Inspect the rendered R synthesis report](https://grant-mccurdy.github.io/artifacts/assessment-intelligence/gradebook_synthesis_report.html)
-
-![Assessment dashboard overview](screenshots/dashboard-overview.png)
-
 The first dashboard view presents current score, growth, completion,
 proficiency, distribution, and readiness signals. Ranked decision insights use
 a minimum cohort size of 10 so small groups are not elevated as headline
 findings.
-
-![Stakeholder decision notes](screenshots/stakeholder-decision-notes.png)
 
 ## What The Project Proves
 
