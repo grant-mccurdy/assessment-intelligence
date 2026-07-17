@@ -5,10 +5,11 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 import json
 import re
 import shutil
-from datetime import date
+from datetime import date, datetime, timezone
 from pathlib import Path
 from statistics import mean
 from typing import Any
@@ -17,8 +18,16 @@ from typing import Any
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_EXTRACT_DIR = PROJECT_ROOT / "data" / "external" / "education-data-simulation-engine"
 DEFAULT_OUTPUT = PROJECT_ROOT / "data" / "synthetic" / "assessment-dashboard.json"
+DEFAULT_MANIFEST_OUTPUT = PROJECT_ROOT / "data" / "published" / "assessment-dashboard.manifest.json"
 DEFAULT_ITEM_COUNT = 30
 MASTERY_SCORE = 70.0
+EXTRACT_NAMES = (
+    "course_section_performance.csv",
+    "assignment_growth_by_course.csv",
+    "nonparticipation_by_group.csv",
+    "lms_enrollment_reconciliation.csv",
+    "student_readiness_extract.csv",
+)
 
 
 def read_rows(path: Path) -> list[dict[str, str]]:
@@ -33,6 +42,15 @@ def rel(path: Path) -> str:
         return path.resolve().relative_to(PROJECT_ROOT).as_posix()
     except ValueError:
         return path.as_posix()
+
+
+def sha256_bytes(content: bytes) -> str:
+    return hashlib.sha256(content).hexdigest()
+
+
+def csv_row_count(path: Path) -> int:
+    with path.open(newline="", encoding="utf-8") as handle:
+        return sum(1 for _ in csv.DictReader(handle))
 
 
 def to_float(value: str | None, default: float = 0.0) -> float:
@@ -320,13 +338,7 @@ def completion_rates(records: list[dict[str, Any]], periods: list[dict[str, Any]
 
 
 def build_dashboard(extract_dir: Path) -> dict[str, Any]:
-    files = {
-        "course_section_performance.csv": extract_dir / "course_section_performance.csv",
-        "assignment_growth_by_course.csv": extract_dir / "assignment_growth_by_course.csv",
-        "nonparticipation_by_group.csv": extract_dir / "nonparticipation_by_group.csv",
-        "lms_enrollment_reconciliation.csv": extract_dir / "lms_enrollment_reconciliation.csv",
-        "student_readiness_extract.csv": extract_dir / "student_readiness_extract.csv",
-    }
+    files = {name: extract_dir / name for name in EXTRACT_NAMES}
     performance_rows = read_rows(files["course_section_performance.csv"])
     growth_rows = read_rows(files["assignment_growth_by_course.csv"])
     missingness_rows = read_rows(files["nonparticipation_by_group.csv"])
@@ -390,24 +402,71 @@ def build_dashboard(extract_dir: Path) -> dict[str, Any]:
     }
 
 
+def build_publication_manifest(
+    dashboard: dict[str, Any], dashboard_bytes: bytes, extract_dir: Path
+) -> dict[str, Any]:
+    extracts = []
+    for name in EXTRACT_NAMES:
+        extract_path = extract_dir / name
+        extract_bytes = extract_path.read_bytes()
+        extracts.append(
+            {
+                "name": name,
+                "rows": csv_row_count(extract_path),
+                "sha256": sha256_bytes(extract_bytes),
+            }
+        )
+
+    builder_path = Path(__file__).resolve()
+    return {
+        "schemaVersion": "assessment-dashboard-manifest-v1",
+        "contract": dashboard["source"]["contract"],
+        "generatedAt": datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
+        "dashboard": {
+            "path": "data/synthetic/assessment-dashboard.json",
+            "bytes": len(dashboard_bytes),
+            "sha256": sha256_bytes(dashboard_bytes),
+            "recordCounts": dashboard["source"]["recordCounts"],
+        },
+        "builder": {
+            "path": rel(builder_path),
+            "sha256": sha256_bytes(builder_path.read_bytes()),
+        },
+        "extracts": extracts,
+    }
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Build static dashboard JSON from SQL extract CSVs.")
     parser.add_argument("--extract-dir", type=Path, default=DEFAULT_EXTRACT_DIR)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--pages-output", type=Path)
+    parser.add_argument("--manifest-output", type=Path, default=DEFAULT_MANIFEST_OUTPUT)
+    parser.add_argument("--pages-manifest-output", type=Path)
     return parser.parse_args()
 
 
 def main() -> None:
     args = parse_args()
     dashboard = build_dashboard(args.extract_dir)
+    dashboard_bytes = (json.dumps(dashboard, indent=2) + "\n").encode("utf-8")
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(json.dumps(dashboard, indent=2) + "\n", encoding="utf-8")
+    args.output.write_bytes(dashboard_bytes)
     print(f"wrote {rel(args.output)}")
     if args.pages_output:
         args.pages_output.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(args.output, args.pages_output)
         print(f"synced dashboard JSON to {args.pages_output}")
+
+    manifest = build_publication_manifest(dashboard, dashboard_bytes, args.extract_dir)
+    manifest_bytes = (json.dumps(manifest, indent=2) + "\n").encode("utf-8")
+    args.manifest_output.parent.mkdir(parents=True, exist_ok=True)
+    args.manifest_output.write_bytes(manifest_bytes)
+    print(f"wrote {rel(args.manifest_output)}")
+    if args.pages_manifest_output:
+        args.pages_manifest_output.parent.mkdir(parents=True, exist_ok=True)
+        args.pages_manifest_output.write_bytes(manifest_bytes)
+        print(f"synced dashboard manifest to {args.pages_manifest_output}")
 
 
 if __name__ == "__main__":

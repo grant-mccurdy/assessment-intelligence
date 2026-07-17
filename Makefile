@@ -9,6 +9,8 @@ SYNTHETIC_SCORES_LONG ?= data/synthetic/synthetic_student_scores_long.csv
 SYNTHETIC_ASSIGNMENT_METADATA ?= data/synthetic/synthetic_assignment_metadata.csv
 DASHBOARD_JSON ?= ../grant-mccurdy.github.io/data/synthetic/assessment-dashboard.json
 DASHBOARD_LOCAL_JSON ?= data/synthetic/assessment-dashboard.json
+DASHBOARD_MANIFEST ?= data/published/assessment-dashboard.manifest.json
+DASHBOARD_PAGES_MANIFEST ?= ../grant-mccurdy.github.io/data/synthetic/assessment-dashboard.manifest.json
 SYNTHETIC_WAREHOUSE ?= ../education-data-simulation-engine/warehouse/synthetic_math.duckdb
 SYNTHETIC_WAREHOUSE_EXTRACT_DIR ?= data/external/education-data-simulation-engine
 SYNTHETIC_SUPABASE_EXTRACT_DIR ?= data/external/education-data-simulation-engine-supabase
@@ -63,7 +65,7 @@ assessment-pipeline:
 	$(RSCRIPT) analysis/run_pipeline.R
 
 dashboard-sync: synthetic-warehouse-extract
-	$(PYTHON) scripts/build_sql_dashboard_json.py --extract-dir "$(SYNTHETIC_WAREHOUSE_EXTRACT_DIR)" --output "$(DASHBOARD_LOCAL_JSON)" --pages-output "$(DASHBOARD_JSON)"
+	$(PYTHON) scripts/build_sql_dashboard_json.py --extract-dir "$(SYNTHETIC_WAREHOUSE_EXTRACT_DIR)" --output "$(DASHBOARD_LOCAL_JSON)" --pages-output "$(DASHBOARD_JSON)" --manifest-output "$(DASHBOARD_MANIFEST)" --pages-manifest-output "$(DASHBOARD_PAGES_MANIFEST)"
 
 gradebook-workflow: gradebook-profile synthetic-gradebook validate-gradebook
 
