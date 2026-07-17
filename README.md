@@ -43,6 +43,11 @@ This repository owns the assessment extract contract, dashboard-data builder,
 statistical workflows, validation, and reporting artifacts. The portfolio repo
 owns the shared visual shell used to publish them.
 
+The builder also writes a publication manifest containing the dashboard
+SHA-256, builder SHA-256, extract hashes and row counts, and dashboard record
+counts. The portfolio site's quality check verifies its deployed JSON against
+that manifest, making source drift visible before publication.
+
 ### SQL-backed analytics
 
 Five SQL extracts support distinct stakeholder questions:
@@ -106,7 +111,8 @@ make analytics-install
 make sql-warehouse-report
 ```
 
-Build the dashboard JSON and sync the portfolio deployment artifact:
+Build the dashboard JSON and publication manifest, then sync both portfolio
+deployment artifacts:
 
 ```bash
 make dashboard-sync
@@ -129,7 +135,9 @@ The repository also contains deeper proof for technical reviewers:
 - `sql/extracts/` and `sql/extracts_postgres/` define the DuckDB and hosted
   extract contracts.
 - `scripts/build_sql_dashboard_json.py` converts those extracts into the
-  dashboard data model.
+  dashboard data model and hash-bound publication manifest.
+- `data/published/assessment-dashboard.manifest.json` records the exact SQL
+  extracts, builder, counts, and dashboard payload used for publication.
 - `reports/sql_warehouse_assessment_report.md` provides a generated analyst
   brief with low-sample ranking safeguards.
 - `reports/gradebook_reconstruction_validation.md` documents synthetic
@@ -170,7 +178,7 @@ repository.
 
 ## Current Status
 
-The public dashboard, SQL extract path, R reporting workflows, optional hosted
-extract path, privacy validator, and recruiter-facing evidence are implemented.
-The next product-level improvement is to move the canonical dashboard bundle
-into this repository and make the portfolio site consume a generated release.
+The public dashboard, shared SQL extract path, publication manifest, R reporting
+workflows, optional hosted extract path, privacy validator, and reviewer-facing
+evidence are implemented. The portfolio site consumes the generated dashboard
+and rejects payloads that do not match the publication manifest.
