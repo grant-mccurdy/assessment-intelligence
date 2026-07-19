@@ -1,5 +1,7 @@
 # Assessment Intelligence
 
+[![Quality](https://github.com/grant-mccurdy/assessment-intelligence/actions/workflows/quality.yml/badge.svg)](https://github.com/grant-mccurdy/assessment-intelligence/actions/workflows/quality.yml)
+
 Stakeholder-facing assessment analytics built from public-safe synthetic data.
 
 ## Project Links
@@ -8,6 +10,8 @@ Stakeholder-facing assessment analytics built from public-safe synthetic data.
 - [Read the concise portfolio brief](https://grant-mccurdy.github.io/projects/assessment-intelligence.html)
 - [Review the reporting case study](https://grant-mccurdy.github.io/case-studies/assessment-reporting.html)
 - [Inspect the rendered R synthesis report](https://grant-mccurdy.github.io/artifacts/assessment-intelligence/gradebook_synthesis_report.html)
+
+![Assessment dashboard showing synthetic program trends and decision controls](docs/images/assessment-dashboard.png)
 
 Assessment Intelligence turns SQL-backed assessment records into an interactive
 dashboard, reproducible reports, data-quality checks, and decision notes that
@@ -182,3 +186,11 @@ The public dashboard, shared SQL extract path, publication manifest, R reporting
 workflows, optional hosted extract path, privacy validator, and reviewer-facing
 evidence are implemented. The portfolio site consumes the generated dashboard
 and rejects payloads that do not match the publication manifest.
+
+## Licensing
+
+- Code is available under the [MIT License](LICENSE).
+- Original documentation and generated visual content are available under [CC BY 4.0](LICENSE-CONTENT.md).
+- Original synthetic datasets are available under [CC BY 4.0](LICENSE-DATA.md).
+
+Third-party materials, trademarks, personal likenesses, and acquired source material are excluded unless explicitly stated otherwise.

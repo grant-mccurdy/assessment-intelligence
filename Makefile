@@ -1,4 +1,4 @@
-.PHONY: all r-check r-setup analytics-install synthetic-warehouse-extract sql-warehouse-report supabase-extract supabase-report ai-extract-review ai-extract-review-api toolchain-smoke toolchain-smoke-html toolchain-smoke-pdf toolchain-smoke-quarto assessment-pipeline dashboard-sync gradebook-workflow gradebook-profile synthetic-gradebook validate-gradebook privacy-check memo render-report-html render-report-pdf render-gradebook-report-html render-gradebook-report-pdf clean-generated
+.PHONY: all check r-check r-setup analytics-install synthetic-warehouse-extract sql-warehouse-report supabase-extract supabase-report ai-extract-review ai-extract-review-api toolchain-smoke toolchain-smoke-html toolchain-smoke-pdf toolchain-smoke-quarto assessment-pipeline dashboard-sync verify-publication gradebook-workflow gradebook-profile synthetic-gradebook validate-gradebook privacy-check memo render-report-html render-report-pdf render-gradebook-report-html render-gradebook-report-pdf clean-generated
 
 PYTHON ?= python3
 RSCRIPT ?= Rscript --vanilla
@@ -18,7 +18,9 @@ SUPABASE_EXTRACT_REPORT ?= reports/supabase_assessment_extract.md
 SUPABASE_ASSESSMENT_REPORT ?= reports/supabase_assessment_report.md
 OPENAI_ENV_FILE ?= ../../.env
 
-all: privacy-check
+all: check
+
+check: verify-publication
 
 r-check:
 	Rscript --version
@@ -66,6 +68,9 @@ assessment-pipeline:
 
 dashboard-sync: synthetic-warehouse-extract
 	$(PYTHON) scripts/build_sql_dashboard_json.py --extract-dir "$(SYNTHETIC_WAREHOUSE_EXTRACT_DIR)" --output "$(DASHBOARD_LOCAL_JSON)" --pages-output "$(DASHBOARD_JSON)" --manifest-output "$(DASHBOARD_MANIFEST)" --pages-manifest-output "$(DASHBOARD_PAGES_MANIFEST)"
+
+verify-publication:
+	$(PYTHON) scripts/verify_publication.py --extract-dir "$(SYNTHETIC_WAREHOUSE_EXTRACT_DIR)" --manifest "$(DASHBOARD_MANIFEST)"
 
 gradebook-workflow: gradebook-profile synthetic-gradebook validate-gradebook
 
