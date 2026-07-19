@@ -337,7 +337,39 @@ def completion_rates(records: list[dict[str, Any]], periods: list[dict[str, Any]
     return rates
 
 
-def build_dashboard(extract_dir: Path) -> dict[str, Any]:
+def normalize_generated_date(value: str) -> str:
+    try:
+        parsed = date.fromisoformat(value)
+    except ValueError as error:
+        raise ValueError(f"Invalid generated date {value!r}; expected YYYY-MM-DD") from error
+    if parsed.isoformat() != value:
+        raise ValueError(f"Invalid generated date {value!r}; expected YYYY-MM-DD")
+    return value
+
+
+def normalize_generated_at(value: str) -> str:
+    try:
+        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError as error:
+        raise ValueError(
+            f"Invalid generated timestamp {value!r}; expected UTC ISO 8601"
+        ) from error
+    if parsed.tzinfo is None:
+        raise ValueError(f"Invalid generated timestamp {value!r}; timezone is required")
+    normalized = (
+        parsed.astimezone(timezone.utc)
+        .replace(microsecond=0)
+        .isoformat()
+        .replace("+00:00", "Z")
+    )
+    if normalized != value:
+        raise ValueError(
+            f"Invalid generated timestamp {value!r}; expected normalized UTC ISO 8601"
+        )
+    return normalized
+
+
+def build_dashboard(extract_dir: Path, generated_date: str | None = None) -> dict[str, Any]:
     files = {name: extract_dir / name for name in EXTRACT_NAMES}
     performance_rows = read_rows(files["course_section_performance.csv"])
     growth_rows = read_rows(files["assignment_growth_by_course.csv"])
@@ -351,7 +383,7 @@ def build_dashboard(extract_dir: Path) -> dict[str, Any]:
     student_records = build_student_records(readiness_rows)
 
     return {
-        "generated": date.today().isoformat(),
+        "generated": normalize_generated_date(generated_date or date.today().isoformat()),
         "source": {
             "project": "assessment-intelligence",
             "upstreamProject": "education-data-simulation-engine",
@@ -403,7 +435,10 @@ def build_dashboard(extract_dir: Path) -> dict[str, Any]:
 
 
 def build_publication_manifest(
-    dashboard: dict[str, Any], dashboard_bytes: bytes, extract_dir: Path
+    dashboard: dict[str, Any],
+    dashboard_bytes: bytes,
+    extract_dir: Path,
+    generated_at: str | None = None,
 ) -> dict[str, Any]:
     extracts = []
     for name in EXTRACT_NAMES:
@@ -421,9 +456,16 @@ def build_publication_manifest(
     return {
         "schemaVersion": "assessment-dashboard-manifest-v1",
         "contract": dashboard["source"]["contract"],
-        "generatedAt": datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
+        "generatedAt": normalize_generated_at(
+            generated_at
+            or datetime.now(timezone.utc)
+            .replace(microsecond=0)
+            .isoformat()
+            .replace("+00:00", "Z")
+        ),
         "dashboard": {
             "path": "data/synthetic/assessment-dashboard.json",
+            "generatedDate": dashboard["generated"],
             "bytes": len(dashboard_bytes),
             "sha256": sha256_bytes(dashboard_bytes),
             "recordCounts": dashboard["source"]["recordCounts"],
@@ -443,12 +485,20 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--pages-output", type=Path)
     parser.add_argument("--manifest-output", type=Path, default=DEFAULT_MANIFEST_OUTPUT)
     parser.add_argument("--pages-manifest-output", type=Path)
+    parser.add_argument(
+        "--generated-date",
+        help="Reproducible dashboard date in YYYY-MM-DD format (defaults to today).",
+    )
+    parser.add_argument(
+        "--generated-at",
+        help="Reproducible manifest timestamp in normalized UTC ISO 8601 format.",
+    )
     return parser.parse_args()
 
 
 def main() -> None:
     args = parse_args()
-    dashboard = build_dashboard(args.extract_dir)
+    dashboard = build_dashboard(args.extract_dir, args.generated_date)
     dashboard_bytes = (json.dumps(dashboard, indent=2) + "\n").encode("utf-8")
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_bytes(dashboard_bytes)
@@ -458,7 +508,12 @@ def main() -> None:
         shutil.copyfile(args.output, args.pages_output)
         print(f"synced dashboard JSON to {args.pages_output}")
 
-    manifest = build_publication_manifest(dashboard, dashboard_bytes, args.extract_dir)
+    manifest = build_publication_manifest(
+        dashboard,
+        dashboard_bytes,
+        args.extract_dir,
+        args.generated_at,
+    )
     manifest_bytes = (json.dumps(manifest, indent=2) + "\n").encode("utf-8")
     args.manifest_output.parent.mkdir(parents=True, exist_ok=True)
     args.manifest_output.write_bytes(manifest_bytes)
