@@ -60,6 +60,17 @@ def main() -> int:
     if failures:
         fail("privacy/schema validation failed: " + "; ".join(item.detail for item in failures))
 
+    advanced_sequence = "Beyond Core Math Sequence"
+    course_benchmarks = dashboard.get("bands", {}).get("mastery", {}).get("byCourse", {})
+    advanced_benchmark = course_benchmarks.get(advanced_sequence)
+    other_benchmarks = [
+        value
+        for course, value in course_benchmarks.items()
+        if course != advanced_sequence
+    ]
+    if advanced_benchmark is None or advanced_benchmark <= max(other_benchmarks, default=0):
+        fail("Beyond Core Math Sequence must retain the highest course benchmark")
+
     print(
         "verified dashboard publication: "
         f"{dashboard_meta['recordCounts']['syntheticStudentRecords']} synthetic student records, "
