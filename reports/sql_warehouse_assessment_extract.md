@@ -1,6 +1,6 @@
 # SQL Warehouse Assessment Extract
 
-Generated: 2026-07-17 19:04:12 UTC
+Generated: 2026-07-20 19:36:39 UTC
 
 Source: `education-data-simulation-engine/warehouse/synthetic_math.duckdb`
 

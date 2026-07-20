@@ -31,7 +31,7 @@ COURSE_PROFICIENCY_BENCHMARKS = {
     "AP Precalculus": 70.0,
     "AP Calculus AB": 70.0,
     "AP Calculus BC": 72.0,
-    "Beyond Core Math Sequence": 65.0,
+    "Beyond Core Math Sequence": 75.0,
 }
 EXTRACT_NAMES = (
     "course_section_performance.csv",
@@ -376,8 +376,9 @@ def build_bands(student_records: list[dict[str, Any]], periods: list[dict[str, A
                 for course in sorted({row["course"] for row in student_records})
             },
             "method": (
-                "Synthetic course-level cut scores configured for this portfolio demonstration; "
-                "they are illustrative and are not policy or validation thresholds."
+                "Synthetic course-level cut scores reflect expected sequence attainment; Beyond Core Math "
+                "Sequence has the highest cut score because it represents study after the core sequence. "
+                "These illustrative values are not policy or validation thresholds."
             ),
         },
     }
