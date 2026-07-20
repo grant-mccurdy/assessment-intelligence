@@ -20,7 +20,19 @@ DEFAULT_EXTRACT_DIR = PROJECT_ROOT / "data" / "external" / "education-data-simul
 DEFAULT_OUTPUT = PROJECT_ROOT / "data" / "synthetic" / "assessment-dashboard.json"
 DEFAULT_MANIFEST_OUTPUT = PROJECT_ROOT / "data" / "published" / "assessment-dashboard.manifest.json"
 DEFAULT_ITEM_COUNT = 30
-MASTERY_SCORE = 70.0
+FIRST_ACADEMIC_YEAR_START = 2019
+DEFAULT_PROFICIENCY_BENCHMARK = 70.0
+COURSE_PROFICIENCY_BENCHMARKS = {
+    "Algebra 1": 65.0,
+    "Geometry": 66.0,
+    "Algebra 2": 68.0,
+    "Honors Algebra 2": 70.0,
+    "Precalculus": 68.0,
+    "AP Precalculus": 70.0,
+    "AP Calculus AB": 70.0,
+    "AP Calculus BC": 72.0,
+    "Beyond Core Math Sequence": 65.0,
+}
 EXTRACT_NAMES = (
     "course_section_performance.csv",
     "assignment_growth_by_course.csv",
@@ -81,14 +93,31 @@ def section_short_label(section_label: str) -> str:
     return section_label
 
 
+def academic_year_for_order(order: int) -> tuple[int, int, str]:
+    start = FIRST_ACADEMIC_YEAR_START + max(0, (order - 1) // 2)
+    end = start + 1
+    return start, end, f"{start}-{str(end)[-2:]}"
+
+
+def proficiency_benchmark(course_name: str) -> float:
+    return COURSE_PROFICIENCY_BENCHMARKS.get(course_name, DEFAULT_PROFICIENCY_BENCHMARK)
+
+
 def period_for_assignment(label: str, assessment_window: str, sequence_index: int | None = None) -> dict[str, Any]:
     order = sequence_index if sequence_index is not None else to_int(label.rsplit(" ", 1)[-1], 1)
     season = "Beginning" if assessment_window == "beginning_of_year" else "End"
+    window_code = "BOY" if assessment_window == "beginning_of_year" else "EOY"
+    academic_year_start, academic_year_end, academic_year = academic_year_for_order(order)
     return {
         "id": slug(label),
-        "label": label,
-        "shortLabel": f"A{order:02d}",
-        "year": 2026,
+        "label": f"{academic_year} {window_code} Standardized Math Assessment",
+        "shortLabel": f"{academic_year} {window_code}",
+        "sourceLabel": label,
+        "year": academic_year_end,
+        "academicYear": academic_year,
+        "academicYearStart": academic_year_start,
+        "academicYearEnd": academic_year_end,
+        "windowCode": window_code,
         "season": season,
         "order": order,
         "assessmentWindow": assessment_window,
@@ -138,7 +167,13 @@ def section_readiness(readiness_rows: list[dict[str, str]]) -> dict[str, float]:
     return {section_id: round1(mean(values)) for section_id, values in grouped.items() if values}
 
 
-def section_proficiency(readiness_rows: list[dict[str, str]], section_id: str, label: str, order: int) -> float:
+def section_proficiency(
+    readiness_rows: list[dict[str, str]],
+    section_id: str,
+    label: str,
+    order: int,
+    course_name: str,
+) -> float:
     scores = [
         score_for_assignment(row, label, order)
         for row in readiness_rows
@@ -147,7 +182,8 @@ def section_proficiency(readiness_rows: list[dict[str, str]], section_id: str, l
     present_scores = [score for score in scores if completed_score(score)]
     if not present_scores:
         return 0.0
-    return round1(100 * sum(score >= MASTERY_SCORE for score in present_scores) / len(present_scores))
+    benchmark = proficiency_benchmark(course_name)
+    return round1(100 * sum(score >= benchmark for score in present_scores) / len(present_scores))
 
 
 def build_sections(
@@ -173,7 +209,13 @@ def build_sections(
         baseline = to_float(first.get("avg_present_score"))
         latest_score = to_float(latest.get("avg_present_score"))
         completion = round1(100 * (1 - to_float(latest.get("nonparticipation_rate"))))
-        proficiency = section_proficiency(readiness_rows, section_id, latest["assignment_label"], to_int(latest["sequence_index"]))
+        proficiency = section_proficiency(
+            readiness_rows,
+            section_id,
+            latest["assignment_label"],
+            to_int(latest["sequence_index"]),
+            first["course_name"],
+        )
         sections.append(
             {
                 "id": section_id,
@@ -220,7 +262,13 @@ def build_records(
         students = to_int(row.get("enrolled_students"))
         completed = to_int(row.get("present_students"))
         completion = round1(100 * (1 - to_float(row.get("nonparticipation_rate"))))
-        proficiency = section_proficiency(readiness_rows, row["section_id"], row["assignment_label"], order)
+        proficiency = section_proficiency(
+            readiness_rows,
+            row["section_id"],
+            row["assignment_label"],
+            order,
+            row["course_name"],
+        )
         growth = round1(score - baseline_by_section.get(row["section_id"], score))
         records.append(
             {
@@ -321,8 +369,16 @@ def build_bands(student_records: list[dict[str, Any]], periods: list[dict[str, A
             "upper": network_upper,
         },
         "mastery": {
-            "label": "Proficiency benchmark",
-            "line": [MASTERY_SCORE for _ in periods],
+            "label": "Program reference benchmark",
+            "line": [DEFAULT_PROFICIENCY_BENCHMARK for _ in periods],
+            "byCourse": {
+                course: proficiency_benchmark(course)
+                for course in sorted({row["course"] for row in student_records})
+            },
+            "method": (
+                "Synthetic course-level cut scores configured for this portfolio demonstration; "
+                "they are illustrative and are not policy or validation thresholds."
+            ),
         },
     }
 
@@ -393,6 +449,13 @@ def build_dashboard(extract_dir: Path, generated_date: str | None = None) -> dic
             "contract": "sql-extract-dashboard-json-v1",
             "dataClass": "public-safe synthetic SQL warehouse extracts",
             "skillMode": "absolute",
+            "assessmentContext": {
+                "name": "Synthetic standardized mathematics assessment",
+                "academicYears": "2019-20 through 2025-26",
+                "windows": ["BOY", "EOY"],
+                "scoreScale": "0-100 percent correct",
+                "benchmarkType": "synthetic course-specific proficiency cut score",
+            },
             "privacyDisclosure": "Generated from public-safe synthetic SQL warehouse extracts; no private rows, identifiers, or school records are included.",
             "recordCounts": {
                 "periods": len(periods),
@@ -408,9 +471,10 @@ def build_dashboard(extract_dir: Path, generated_date: str | None = None) -> dic
             "extractFiles": sorted(files),
         },
         "description": (
-            "Synthetic assessment dashboard data generated from the same SQL warehouse extracts "
-            "used by assessment-intelligence report artifacts. No real students, rosters, teachers, "
-            "sections, IDs, emails, grades, submissions, or school records are included."
+            "Seven synthetic academic years of BOY and EOY standardized mathematics assessment "
+            "data generated from the same SQL warehouse extracts used by assessment-intelligence "
+            "report artifacts. No real students, rosters, teachers, sections, IDs, emails, grades, "
+            "submissions, or school records are included."
         ),
         "bootstrap": {
             "privateBootstrapSource": (
