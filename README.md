@@ -6,7 +6,7 @@ Stakeholder-facing assessment analytics built from public-safe synthetic data.
 
 ## Project Links
 
-- [Open the live assessment dashboard](https://grant-mccurdy.github.io/dashboard/assessment.html)
+- [Open the longitudinal SQL dashboard](https://grant-mccurdy.github.io/dashboard/longitudinal.html)
 - [Read the concise portfolio brief](https://grant-mccurdy.github.io/projects/assessment-intelligence.html)
 - [Review the reporting case study](https://grant-mccurdy.github.io/case-studies/assessment-reporting.html)
 - [Inspect the rendered R synthesis report](https://grant-mccurdy.github.io/artifacts/assessment-intelligence/gradebook_synthesis_report.html)
@@ -39,13 +39,18 @@ The deployed static dashboard provides browser-side filtering and aggregation,
 SVG charts, section detail, and generated decision notes over a public-safe SQL
 extract. The dashboard presentation is deployed from the portfolio repository:
 
-- [Dashboard HTML source](https://github.com/grant-mccurdy/grant-mccurdy.github.io/blob/main/dashboard/assessment.html)
+- [Dashboard HTML source](https://github.com/grant-mccurdy/grant-mccurdy.github.io/blob/main/dashboard/longitudinal.html)
 - [Dashboard JavaScript source](https://github.com/grant-mccurdy/grant-mccurdy.github.io/blob/main/assets/js/assessment-dashboard.js)
 - [Dashboard logic smoke test](https://github.com/grant-mccurdy/grant-mccurdy.github.io/blob/main/scripts/dashboard_logic_smoke.mjs)
 
 This repository owns the assessment extract contract, dashboard-data builder,
 statistical workflows, validation, and reporting artifacts. The portfolio repo
 owns the shared visual shell used to publish them.
+
+The [Logos department dashboard](https://grant-mccurdy.github.io/dashboard/assessment.html)
+is a separate single-administration example, implemented in the portfolio
+repository from reviewed synthetic report aggregates. Its 500-student dataset
+does not come from this repository's longitudinal SQL extracts.
 
 The builder also writes a publication manifest containing the dashboard
 SHA-256, builder SHA-256, extract hashes and row counts, and dashboard record
